@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('../fonts/Thonburi.ttf') format('truetype');
+  src: url('../fonts/SFThonburi-Regular.ttf') format('truetype');
 }
 
 @font-face {
@@ -11,15 +11,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('../fonts/Thonburi-Bold.ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'Thonburi';
-  font-style: normal;
-  font-weight: 300;
-  font-display: swap;
-  src: url('../fonts/Thonburi-Light.ttf') format('truetype');
+  src: url('../fonts/SFThonburi-Bold.ttf') format('truetype');
 }
 
 @font-face {
