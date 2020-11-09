@@ -2,6 +2,7 @@ import customIcons from './assets/images/customIcons.js'
 
 export default {
   target: 'static',
+  ssr: false,
 
   head: {
     titleTemplate: (title) => {

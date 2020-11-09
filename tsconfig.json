@@ -26,7 +26,8 @@
     "types": [
       "@types/node",
       "@nuxt/types",
-      "@nuxtjs/dayjs"
+      "@nuxtjs/dayjs",
+      "@line/liff"
     ]
   },
   "exclude": [

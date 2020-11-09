@@ -89,6 +89,7 @@
             <CIcon name="ipin" color="#FF9A3D" />
           </CInputLeftElement>
           <CInput
+            v-model="eventForm.eventLocation"
             type="text"
             placeholder="เจอกันที่ไหนดีนะ"
             variant="unstyled"
@@ -190,7 +191,7 @@
               </!--CBox-->
             </CFlex>
             <CFlex justify-content="center" align-items="center">
-              <CSwitch color="orange" />
+              <CSwitch v-model="eventForm.needUpdate" color="orange" />
             </CFlex>
           </CGrid>
         </CBox>
@@ -221,21 +222,21 @@
                   font-size="sm"
                   rounded="12px"
                   :bg="
-                    eventForm.notification[noti.slug]
+                    eventForm.remindFreq[noti.slug]
                       ? 'rgba(240, 97, 41, 0.3);'
                       : '#F2F2F2;'
                   "
                   :border="
-                    eventForm.notification[noti.slug]
+                    eventForm.remindFreq[noti.slug]
                       ? '1px solid #F06129;'
                       : '1px solid #BDBDBD;'
                   "
                   :color="
-                    eventForm.notification[noti.slug] ? '#F06129;' : '#BDBDBD;'
+                    eventForm.remindFreq[noti.slug] ? '#F06129;' : '#BDBDBD;'
                   "
                   cursor="pointer"
                   @click="
-                    eventForm.notification[noti.slug] = !eventForm.notification[
+                    eventForm.remindFreq[noti.slug] = !eventForm.remindFreq[
                       noti.slug
                     ]
                   "
@@ -248,22 +249,22 @@
         </CBox>
       </CGrid>
 
-      <nuxt-link to="/schedule/select-participant">
-        <c-button
-          right-icon="arrow-forward"
-          variant-color="orange"
-          variant="solid"
-          w="100%"
-        >
-          (1/3) ต่อไป
-        </c-button>
-      </nuxt-link>
+      <c-button
+        right-icon="arrow-forward"
+        variant-color="orange"
+        variant="solid"
+        w="100%"
+        @click="next"
+      >
+        (1/3) ต่อไป
+      </c-button>
     </CBox>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import liff from '@line/liff'
 
 export default Vue.extend({
   data() {
@@ -271,29 +272,29 @@ export default Vue.extend({
       todayDate: this.$dayjs().format('YYYY-MM-DD'),
       minTime: this.$dayjs().format('HH:mm'),
       eventForm: {
-        eventName: '',
-        eventDate: this.$dayjs().format('YYYY-MM-DD'),
-        eventTime: this.$dayjs().format('HH:mm'),
-        eventLocation: '',
-        needUpdate: false,
-        notification: {
-          before1Day: true,
-          before1Hour: false,
-          afterEvery15Mins: false,
+        eventName: this.$store.getters.getEvent.eventName,
+        eventDate: this.$store.getters.getEvent.eventDate,
+        eventTime: this.$store.getters.getEvent.eventTime,
+        eventLocation: this.$store.getters.getEvent.eventLocation,
+        needUpdate: this.$store.getters.getEvent.needUpdate,
+        remindFreq: {
+          b1d: this.$store.getters.getEvent.remindFreq.b1d,
+          b60m: this.$store.getters.getEvent.remindFreq.b60m,
+          ae15m: this.$store.getters.getEvent.remindFreq.ae15m,
         },
       },
       notificationLabel: [
         {
           title: 'ก่อน 1 วัน',
-          slug: 'before1Day',
+          slug: 'b1d',
         },
         {
           title: 'ก่อน 60 นาที',
-          slug: 'before1Hour',
+          slug: 'b60m',
         },
         {
           title: 'หลังทุก ๆ 15 นาที',
-          slug: 'afterEvery15Mins',
+          slug: 'ae15m',
         },
       ],
     }
@@ -310,6 +311,20 @@ export default Vue.extend({
       } else {
         this.minTime = this.$dayjs().format('HH:mm')
       }
+    },
+  },
+  mounted() {
+    liff.init({ liffId: '1655194495-kxjgmBQ6' }).then(() => {
+      if (liff.isLoggedIn()) {
+        console.log('Login')
+      } else {
+        console.log('Not Login')
+      }
+    })
+  },
+  methods: {
+    next() {
+      this.$store.dispatch('setEventInfo', this.eventForm)
     },
   },
   head: {
