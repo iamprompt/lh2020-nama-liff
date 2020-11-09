@@ -5,9 +5,7 @@ export default {
 
   head: {
     titleTemplate: (title) => {
-      return title
-        ? `${title} | NAMA : The Assistant Bot`
-        : 'NAMA : The Assistant Bot'
+      return title ? `${title} | NAMA` : 'NAMA : The Assistant Bot'
     },
     meta: [
       { charset: 'utf-8' },
@@ -25,7 +23,12 @@ export default {
 
   buildModules: ['@nuxt/typescript-build'],
 
-  modules: ['@chakra-ui/nuxt', '@nuxtjs/emotion', '@nuxtjs/axios'],
+  modules: [
+    '@chakra-ui/nuxt',
+    '@nuxtjs/emotion',
+    '@nuxtjs/axios',
+    '@nuxtjs/dayjs',
+  ],
 
   chakra: {
     extendTheme: {
@@ -45,5 +48,10 @@ export default {
   },
 
   axios: {},
+  dayjs: {
+    locales: ['en', 'th'],
+    defaultLocale: 'th',
+    plugins: [], // Your Day.js plugin
+  },
   build: {},
 }

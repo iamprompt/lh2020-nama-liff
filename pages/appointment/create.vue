@@ -16,13 +16,13 @@
       <CFlex justify-content="space-between" mb="2">
         <CText font-size="sm">ตั้งชื่อนัดหมาย</CText>
         <!-- Count character -->
-        <CText font-size="sm">{{ eventTitleChar }}/50</CText>
+        <CText font-size="sm">{{ eventNameChar }}/50</CText>
       </CFlex>
       <!-- Grid to separate between Textarea and Image -->
       <CGrid template-columns="auto 120px">
         <!-- Event title Input textarea -->
         <CInput
-          v-model="eventForm.eventTitle"
+          v-model="eventForm.eventName"
           as="textarea"
           variant="unstyled"
           placeholder="นัดอะไรดีน้า..."
@@ -61,6 +61,8 @@
             placeholder="นัดวันไหนดี"
             px="0.5rem"
             variant="unstyled"
+            :min="todayDate"
+            @change="calculateMinTime()"
           />
         </CInputGroup>
         <!-- Time -->
@@ -74,6 +76,7 @@
             placeholder="เวลา"
             px="0.5rem"
             variant="unstyled"
+            :min="minTime"
           />
         </CInputGroup>
       </CGrid>
@@ -109,7 +112,7 @@
               <CText h="2.5rem" align-items="center" line-height="2.5rem">
                 การอัปเดตจากสมาชิก
               </CText>
-              <CBox d="block" mb="1">
+              <!--CBox d="block" mb="1">
                 <CFlex
                   justify-content="center"
                   align-items="center"
@@ -184,9 +187,9 @@
                     </CFlex>
                   </CBox>
                 </CFlex>
-              </CBox>
+              </!--CBox-->
             </CFlex>
-            <CFlex justify-content="center" align-items="center" h="2.5rem">
+            <CFlex justify-content="center" align-items="center">
               <CSwitch color="orange" />
             </CFlex>
           </CGrid>
@@ -261,14 +264,18 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
 export default Vue.extend({
   data() {
     return {
+      todayDate: this.$dayjs().format('YYYY-MM-DD'),
+      minTime: this.$dayjs().format('HH:mm'),
       eventForm: {
-        eventTitle: '',
-        eventDate: '2020-11-12',
-        eventTime: '16:10',
-        subscribeFriendUpdate: false,
+        eventName: '',
+        eventDate: this.$dayjs().format('YYYY-MM-DD'),
+        eventTime: this.$dayjs().format('HH:mm'),
+        eventLocation: '',
+        needUpdate: false,
         notification: {
           before1Day: true,
           before1Hour: false,
@@ -292,9 +299,21 @@ export default Vue.extend({
     }
   },
   computed: {
-    eventTitleChar(): number {
-      return this.eventForm.eventTitle.length
+    eventNameChar(): number {
+      return this.eventForm.eventName.length
     },
+  },
+  watch: {
+    'eventForm.eventDate'(newVal: string) {
+      if (this.todayDate !== newVal) {
+        this.minTime = '00:00'
+      } else {
+        this.minTime = this.$dayjs().format('HH:mm')
+      }
+    },
+  },
+  head: {
+    title: 'สร้างนัดหมาย',
   },
 })
 </script>
@@ -312,29 +331,5 @@ export default Vue.extend({
 .choiceBox {
   box-shadow: 0px 3px 20px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-}
-</style>
-
-<style lang="scss">
-input[type='date']::-webkit-calendar-picker-indicator {
-  color: rgba(0, 0, 0, 0);
-  opacity: 1;
-  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20.9062 1.875H18.75V0.75C18.75 0.335812 18.4142 0 18 0C17.5858 0 17.25 0.335812 17.25 0.75V1.875H6.75V0.75C6.75 0.335812 6.41423 0 6 0C5.58577 0 5.25 0.335812 5.25 0.75V1.875H3.09375C1.38783 1.875 0 3.26283 0 4.96875V20.9062C0 22.6122 1.38783 24 3.09375 24H20.9062C22.6122 24 24 22.6122 24 20.9062V4.96875C24 3.26283 22.6122 1.875 20.9062 1.875ZM22.5 20.9062C22.5 21.7865 21.7865 22.5 20.9062 22.5H3.09375C2.21353 22.5 1.5 21.7865 1.5 20.9062V8.48438C1.5 8.35495 1.60495 8.25 1.73438 8.25H22.2656C22.395 8.25 22.5 8.35495 22.5 8.48438V20.9062Z' fill='url(%23paint0_linear)'/%3E%3Cdefs%3E%3ClinearGradient id='paint0_linear' x1='12' y1='0' x2='12' y2='24' gradientUnits='userSpaceOnUse'%3E%3Cstop offset='0.166667' stop-color='%23FF9A3D'/%3E%3Cstop offset='1' stop-color='%23F06129'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E%0A");
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  border-radius: 50%;
-  margin-left: 0.5rem;
-}
-
-input[type='time']::-webkit-calendar-picker-indicator {
-  color: rgba(0, 0, 0, 0);
-  opacity: 1;
-  background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 0C5.38293 0 0 5.38293 0 12C0 18.6171 5.38293 24 12 24C18.6171 24 24 18.6171 24 12C24 5.38293 18.6171 0 12 0ZM17.707 18.2069C17.512 18.4019 17.256 18.5001 17.0001 18.5001C16.7441 18.5001 16.4879 18.4019 16.2931 18.2069L11.293 13.207C11.105 13.0201 11.0001 12.7659 11.0001 12.5001V6C11.0001 5.44702 11.4479 5.00006 12 5.00006C12.5521 5.00006 12.9999 5.44702 12.9999 6V12.0861L17.707 16.793C18.098 17.1841 18.098 17.816 17.707 18.2069Z' fill='url(%23paint0_linear)'/%3E%3Cdefs%3E%3ClinearGradient id='paint0_linear' x1='12' y1='0' x2='12' y2='24' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%23F06129'/%3E%3Cstop offset='1' stop-color='%23FF9A3D'/%3E%3C/linearGradient%3E%3C/defs%3E%3C/svg%3E%0A");
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  border-radius: 50%;
-  margin-left: 0.5rem;
 }
 </style>
