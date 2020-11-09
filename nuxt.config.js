@@ -1,3 +1,5 @@
+import customIcons from './assets/images/customIcons.js'
+
 export default {
   target: 'static',
 
@@ -38,7 +40,7 @@ export default {
       autoImport: true,
     },
     icons: {
-      extend: {},
+      extend: { ...customIcons },
     },
   },
 
