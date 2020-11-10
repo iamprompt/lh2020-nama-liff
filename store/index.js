@@ -14,6 +14,7 @@ export const state = () => ({
     },
   },
   participatedAttendee: [],
+  groupMembers: [],
 })
 
 export const getters = {
@@ -22,6 +23,9 @@ export const getters = {
   },
   getAttendee(state) {
     return state.participatedAttendee
+  },
+  getGMembers(state) {
+    return state.groupMembers
   },
 }
 
@@ -35,6 +39,9 @@ export const mutations = {
   SET_ATTENDEE(state, data) {
     state.participatedAttendee = data
   },
+  SET_GMEMBERS(state, data) {
+    state.groupMembers = [...data]
+  },
 }
 
 export const actions = {
@@ -43,5 +50,8 @@ export const actions = {
   },
   setAttendee({ commit }, data) {
     commit('SET_ATTENDEE', data)
+  },
+  setGMembers({ commit }, data) {
+    commit('SET_GMEMBERS', data)
   },
 }

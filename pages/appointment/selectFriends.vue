@@ -95,6 +95,7 @@
             variant-color="orange"
             variant="solid"
             w="100%"
+            @click="nextHandler"
           >
             (2/3) ต่อไป
           </CButton>
@@ -106,15 +107,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { friendLists } from '~/mockData/status.json'
 import { groupApi } from '~/utils/api'
 
 export default Vue.extend({
   data() {
     return {
-      friendLists,
-      groupMembers: [] as Array<ILINEFriends>,
-      usersList: [] as Array<ILINEFriends>,
+      groupMembers: this.$store.getters.getGMembers as Array<ILINEFriends>,
+      usersList: this.$store.getters.getGMembers as Array<ILINEFriends>,
       selectedAttendee: this.$store.getters.getAttendee,
       textSearch: '',
     }
@@ -188,16 +187,26 @@ export default Vue.extend({
     },
     async fetchData() {
       // Cb34ad23b226c50f08c67308a3e75955a
-      const getGroupMembers = await this.$axios.get(
-        groupApi('Cb34ad23b226c50f08c67308a3e75955a').getGroupMembers()
-      )
-      // console.log(getGroupMembers.data.data.profile)
-      this.groupMembers = getGroupMembers.data.data.profile
+      if (this.$store.getters.getGMembers.length === 0) {
+        const getGroupMembers = await this.$axios.get(
+          groupApi('Cb34ad23b226c50f08c67308a3e75955a').getGroupMembers()
+        )
+        // console.log(getGroupMembers.data.data.profile)
+        this.groupMembers = getGroupMembers.data.data.profile
+        this.$store.dispatch('setGMembers', this.groupMembers)
+      }
     },
     backHandler() {
       this.$store.dispatch('setAttendee', this.selectedAttendee)
       this.$router.push('/appointment/create')
     },
+    nextHandler() {
+      this.$store.dispatch('setAttendee', this.selectedAttendee)
+      this.$router.push('/appointment/review')
+    },
+  },
+  head: {
+    title: 'ชวนใครไปบ้าง?',
   },
 })
 </script>
