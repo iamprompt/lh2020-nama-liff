@@ -73,8 +73,8 @@ export default {
       auth: true, // Just as example. Can be any other service.
       functions: {
         location: 'asia-northeast1',
-        emulatorPort: 5001,
-        emulatorHost: 'http://localhost',
+        // emulatorPort: 5001,
+        // emulatorHost: 'http://localhost',
       },
     },
   },
