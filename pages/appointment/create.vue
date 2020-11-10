@@ -320,7 +320,12 @@ export default Vue.extend({
         console.log('Login')
         const firebaseToken = await this.$axios.$post(
           authApi().createCustomToken(),
-          { access_token: liff.getAccessToken() }
+          JSON.stringify({ access_token: liff.getAccessToken() }),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
         )
 
         this.$fire.auth
@@ -331,6 +336,7 @@ export default Vue.extend({
           })
       } else {
         console.log('Not Login')
+
         // liff.login()
       }
     })
