@@ -33,7 +33,7 @@
       "@nuxtjs/dayjs",
       "@line/liff",
       "@nuxtjs/firebase",
-      "@nuxtjs/axios"
+      "@nuxtjs/axios",
     ]
   },
   "exclude": [
