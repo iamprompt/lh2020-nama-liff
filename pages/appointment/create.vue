@@ -265,6 +265,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import liff from '@line/liff'
+import { authApi } from '~/utils/api'
 
 export default Vue.extend({
   data() {
@@ -314,17 +315,29 @@ export default Vue.extend({
     },
   },
   mounted() {
-    liff.init({ liffId: '1655194495-kxjgmBQ6' }).then(() => {
+    liff.init({ liffId: '1655194495-kxjgmBQ6' }).then(async () => {
       if (liff.isLoggedIn()) {
         console.log('Login')
+        const firebaseToken = await this.$axios.get(
+          authApi().verifyLINEToken(),
+          { token: liff.getAccessToken() }
+        )
+        this.$fire.auth
+          .signInWithCustomToken(firebaseToken)
+          .catch((error: any) => {
+            // Handle Errors here.
+            console.log(error)
+          })
       } else {
         console.log('Not Login')
+        // liff.login()
       }
     })
   },
   methods: {
     next() {
       this.$store.dispatch('setEventInfo', this.eventForm)
+      this.$router.push('selectFriends')
     },
   },
   head: {

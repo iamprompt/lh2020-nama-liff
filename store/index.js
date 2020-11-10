@@ -13,11 +13,15 @@ export const state = () => ({
       ae15m: false,
     },
   },
+  participatedAttendee: [],
 })
 
 export const getters = {
   getEvent(state) {
     return state.eventInfo
+  },
+  getAttendee(state) {
+    return state.participatedAttendee
   },
 }
 
@@ -28,10 +32,16 @@ export const mutations = {
       ...data,
     }
   },
+  SET_ATTENDEE(state, data) {
+    state.participatedAttendee = data
+  },
 }
 
 export const actions = {
   setEventInfo({ commit }, data) {
     commit('SET_EVENTINFO', data)
+  },
+  setAttendee({ commit }, data) {
+    commit('SET_ATTENDEE', data)
   },
 }

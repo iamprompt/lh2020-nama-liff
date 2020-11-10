@@ -1,0 +1,64 @@
+{
+  "status": {
+    "unseen": {},
+    "acknowledged": {},
+    "traveling": {},
+    "arrived": {}
+  },
+  "friendLists": [
+    {
+      "name": "John",
+      "status": "unseen",
+      "imgURL":
+        "https://media-exp1.licdn.com/dms/image/C4D03AQFgmoZ4I3iXxQ/profile-displayphoto-shrink_800_800/0?e=1603929600&v=beta&t=O0xSEAUyQPhgu62msg6Sq1vL7U65BKb25poKQ9PHo7A"
+    },
+    {
+      "name": "Tim",
+      "status": "unseen",
+      "imgURL":
+        "https://hackth.line.me/wp-content/themes/Conference_Pro/speaker-11.jpg"
+    },
+    {
+      "name": "Steve",
+      "status": "acknowledged",
+      "imgURL":
+        "https://hackth.line.me/wp-content/themes/Conference_Pro/speaker-12.jpg"
+    },
+    {
+      "name": "Bill",
+      "status": "acknowledged",
+      "imgURL":
+        "https://hackth.line.me/wp-content/themes/Conference_Pro/speaker-16.png"
+    },
+    {
+      "name": "Sarah",
+      "status": "acknowledged",
+      "imgURL":
+        "https://hackth.line.me/wp-content/themes/Conference_Pro/speaker-15.png"
+    },
+    {
+      "name": "Peter",
+      "status": "traveling",
+      "imgURL":
+        "https://hackth.line.me/wp-content/themes/Conference_Pro/speaker-8.jpg"
+    },
+    {
+      "name": "Anna",
+      "status": "traveling",
+      "imgURL":
+        "https://hackth.line.me/wp-content/themes/Conference_Pro/speaker-4.png"
+    },
+    {
+      "name": "Mary",
+      "status": "arrived",
+      "imgURL":
+        "https://hackth.line.me/wp-content/themes/Conference_Pro/speaker-18.png"
+    },
+    {
+      "name": "Roger",
+      "status": "arrived",
+      "imgURL":
+        "https://hackth.line.me/wp-content/themes/Conference_Pro/speaker-5.png"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "eventDate": "2020-11-07",
+  "eventTime": "10:00:00",
+  "venue": "LINE Office Gaysorn Tower Fl.17",
+  "users": [
+    {
+      "id": 1,
+      "src": "pop",
+      "name": "ora",
+      "alt": "ora"
+    },
+    {
+      "id": 2,
+      "src": "https://pbs.twimg.com/profile_images/1206997998900850688/cTXTQiHm_400x400.jpg",
+      "name": "Evan You",
+      "alt": "Evan You"
+    },
+    {
+      "id": 3,
+      "src": "https://res.cloudinary.com/xtellar/image/upload/v1572857445/me_zqos4e.jpg",
+      "name": "Jonathan Bakebwa",
+      "alt": "Jonathan Bakebwa"
+    },
+    {
+      "id": 4,
+      "src": "https://pbs.twimg.com/profile_images/1169353373012897802/skPUWd6e_400x400.jpg",
+      "name": "Segun Adebayo",
+      "alt": "Segun Adebayo"
+    },
+    {
+      "id": 5,
+      "src": "https://pbs.twimg.com/profile_images/1169353373012897802/skPUWd6e_400x400.jpg",
+      "name": "Jirachai Chansivanon",
+      "alt": "Jirachai Chansivanon"
+    },
+    {
+      "id": 6,
+      "src": "https://pbs.twimg.com/profile_images/1169353373012897802/skPUWd6e_400x400.jpg",
+      "name": "Segun Adebayo",
+      "alt": "Segun Adebayo"
+    }
+  ],
+  "isUpdate": true,
+  "remindFreq": ["b1d", "b60m", "e15m"]
+}
