@@ -318,9 +318,17 @@ export default Vue.extend({
     liff.init({ liffId: '1655194495-kxjgmBQ6' }).then(async () => {
       if (liff.isLoggedIn()) {
         console.log('Login')
+        const LINEprofile = await liff.getProfile()
+        const LINEemail = await liff.getDecodedIDToken()?.email
         const firebaseToken = await this.$axios.$post(
           authApi().createCustomToken(),
-          JSON.stringify({ access_token: liff.getAccessToken() }),
+          {
+            access_token: liff.getAccessToken(),
+            id: LINEprofile.userId,
+            displayName: LINEprofile.displayName,
+            pictureUrl: LINEprofile.pictureUrl,
+            email: LINEemail,
+          },
           {
             headers: {
               'Content-Type': 'application/json',
@@ -336,6 +344,25 @@ export default Vue.extend({
           })
       } else {
         console.log('Not Login')
+        const firebaseToken = await this.$axios.$post(
+          authApi().createCustomToken(),
+          {
+            access_token:
+              'eyJhbGciOiJIUzI1NiJ9.JESvrcqgQPtKD5f4oT0zE2wkzBrQIZ1U31k7kqEdszpH_OaDUFzrtx4Baz3CKZS1NSuA0zTWMeCDFOif68eOfZ2IoW7Tu_uftM1QZb4E65W2UecgBYnY_x8M0F1AHQIN.oEkHNqzZm-Ex-57A5oynRIgovs33wkCtzXMy3n0GiQQ',
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        )
+
+        this.$fire.auth
+          .signInWithCustomToken(firebaseToken)
+          .catch((error: any) => {
+            // Handle Errors here.
+            console.log(error)
+          })
 
         // liff.login()
       }
