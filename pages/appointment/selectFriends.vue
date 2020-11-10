@@ -196,7 +196,7 @@ export default Vue.extend({
     },
     backHandler() {
       this.$store.dispatch('setAttendee', this.selectedAttendee)
-      this.$router.push('create')
+      this.$router.push('/appointment/create')
     },
   },
 })

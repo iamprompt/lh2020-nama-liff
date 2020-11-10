@@ -337,7 +337,7 @@ export default Vue.extend({
   methods: {
     next() {
       this.$store.dispatch('setEventInfo', this.eventForm)
-      this.$router.push('selectFriends')
+      this.$router.push('/appointment/selectFriends')
     },
   },
   head: {
