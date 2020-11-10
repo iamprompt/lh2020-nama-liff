@@ -1,4 +1,4 @@
-const HOST = 'https://asia-northeast1-nama-294515.cloudfunctions.net/'
+const HOST = 'https://asia-northeast1-nama-294515.cloudfunctions.net'
 const FULL_URL = `${HOST}`
 
 export const groupApi = (groupId: string) => {
