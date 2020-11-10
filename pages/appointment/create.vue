@@ -320,7 +320,7 @@ export default Vue.extend({
         console.log('Login')
         const firebaseToken = await this.$axios.get(
           authApi().createCustomToken(),
-          { data: { token: liff.getAccessToken() } }
+          { data: { access_token: liff.getAccessToken() } }
         )
 
         this.$fire.auth
