@@ -319,7 +319,7 @@ export default Vue.extend({
       if (liff.isLoggedIn()) {
         console.log('Login')
         const firebaseToken = await this.$axios.get(
-          authApi().verifyLINEToken(),
+          authApi().createCustomToken(),
           { token: liff.getAccessToken() }
         )
         this.$fire.auth

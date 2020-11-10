@@ -14,6 +14,6 @@ export const groupApi = (groupId: string) => {
 
 export const authApi = () => {
   return {
-    verifyLINEToken: () => `${FULL_URL}/verifyLineToken`,
+    createCustomToken: () => `${FULL_URL}/createCustomToken`,
   }
 }
