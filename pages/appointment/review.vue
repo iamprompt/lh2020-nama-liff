@@ -10,7 +10,7 @@
       p="5"
       pt="10"
     >
-      <CHeading font-size="xl" font-weight="bold" text-align="center" mb="4">
+      <CHeading font-size="xl" font-weight="bold" text-align="center" mb="12">
         ตัวอย่างข้อความก่อนส่ง
       </CHeading>
 
@@ -27,6 +27,7 @@
           rounded="12px"
           pos="relative"
           box-shadow="0px 5px 20px rgba(0, 0, 0, 0.08);"
+          transform="rotate(5deg)"
         >
           <!-- header box -->
           <CBox
@@ -130,7 +131,9 @@
 </template>
 
 <script lang="ts">
+import liff from '@line/liff/dist/lib'
 import Vue from 'vue'
+import { groupApi } from '~/utils/api'
 
 export default Vue.extend({
   data() {
@@ -143,7 +146,7 @@ export default Vue.extend({
   computed: {
     _eventDateTime() {
       // @ts-expect-error
-      return `${this.eventDetail.eventDate} ${this.eventDetail.eventTime} `
+      return `${this.eventDetail.eventDate} ${this.eventDetail.eventTime} UTC+7`
     },
     _eventDate() {
       // @ts-expect-error
@@ -174,7 +177,46 @@ export default Vue.extend({
     },
     nextHandler() {
       // this.$store.dispatch('setAttendee', this.selectedAttendee)
-      this.$router.push('/appointment/review')
+      this.submitTheEvent()
+      liff.closeWindow()
+      // this.$router.push('/appointment/review')
+    },
+    async submitTheEvent() {
+      const eventDetail = this.$store.getters.getEvent
+      const eventParticipant: string[] = this.$store.getters.getAttendee
+
+      const LINEprofile = await liff.getProfile()
+      const payload = {
+        eventName: eventDetail.eventName,
+        eventDate: eventDetail.eventDate,
+        eventTime: eventDetail.eventTime,
+        eventStatus: 'active',
+        eventDateTime: this.$fireModule.firestore.Timestamp.fromDate(
+          this.$dayjs(
+            `${eventDetail.eventDate} ${eventDetail.eventTime} UTC+7`
+          ).toDate()
+        ),
+        eventLocation: eventDetail.eventLocation,
+        needUpdate: eventDetail.needUpdate,
+        remindFreq: eventDetail.remindFreq,
+        eventAttendee: eventParticipant.map((attendee) => {
+          return {
+            userId: attendee,
+            status: attendee === LINEprofile.userId ? 'acknowledged' : 'unseen',
+          }
+        }),
+        ownerId: LINEprofile.userId,
+      }
+
+      const LINEContext = await liff.getContext()
+
+      if (LINEContext !== null) {
+        const sendData = await this.$axios.$post(
+          groupApi(LINEContext.groupId).createEvent(),
+          payload
+        )
+        console.log(sendData)
+      }
     },
   },
 })

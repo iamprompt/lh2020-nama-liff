@@ -114,7 +114,7 @@ export default Vue.extend({
     return {
       groupMembers: this.$store.getters.getGMembers as Array<ILINEFriends>,
       usersList: this.$store.getters.getGMembers as Array<ILINEFriends>,
-      selectedAttendee: this.$store.getters.getAttendee,
+      selectedAttendee: this.$store.getters.getAttendee as Array<string>,
       textSearch: '',
     }
   },
