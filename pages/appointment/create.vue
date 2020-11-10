@@ -320,49 +320,34 @@ export default Vue.extend({
         console.log('Login')
         const LINEprofile = await liff.getProfile()
         const LINEemail = await liff.getDecodedIDToken()?.email
-        const firebaseToken = await this.$axios.$post(
-          authApi().createCustomToken(),
-          {
-            access_token: liff.getAccessToken(),
-            id: LINEprofile.userId,
-            displayName: LINEprofile.displayName,
-            pictureUrl: LINEprofile.pictureUrl,
-            email: LINEemail,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
+        await this.$axios
+          .$post(
+            authApi().createCustomToken(),
+            {
+              access_token: liff.getAccessToken(),
+              id: LINEprofile.userId,
+              displayName: LINEprofile.displayName,
+              pictureUrl: LINEprofile.pictureUrl,
+              email: LINEemail,
             },
-          }
-        )
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res: any) => {
+            console.log(res)
 
-        this.$fire.auth
-          .signInWithCustomToken(firebaseToken)
-          .catch((error: any) => {
-            // Handle Errors here.
-            console.log(error)
+            this.$fire.auth
+              .signInWithCustomToken(res.firebase_token)
+              .catch((error: any) => {
+                // Handle Errors here.
+                console.log(error)
+              })
           })
       } else {
         console.log('Not Login')
-        const firebaseToken = await this.$axios.$post(
-          authApi().createCustomToken(),
-          {
-            access_token:
-              'eyJhbGciOiJIUzI1NiJ9.JESvrcqgQPtKD5f4oT0zE2wkzBrQIZ1U31k7kqEdszpH_OaDUFzrtx4Baz3CKZS1NSuA0zTWMeCDFOif68eOfZ2IoW7Tu_uftM1QZb4E65W2UecgBYnY_x8M0F1AHQIN.oEkHNqzZm-Ex-57A5oynRIgovs33wkCtzXMy3n0GiQQ',
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        )
-
-        this.$fire.auth
-          .signInWithCustomToken(firebaseToken)
-          .catch((error: any) => {
-            // Handle Errors here.
-            console.log(error)
-          })
 
         // liff.login()
       }
