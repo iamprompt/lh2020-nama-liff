@@ -34,7 +34,10 @@
       "@line/liff",
       "@nuxtjs/firebase",
       "@nuxtjs/axios",
-      "gapi"
+      "gapi",
+      "gapi.client",
+      "gapi.client.calendar",
+      "gapi.auth2",
     ]
   },
   "exclude": [

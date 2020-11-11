@@ -8,7 +8,7 @@
 import liff from '@line/liff'
 import Vue from 'vue'
 import firebase from 'firebase'
-import { groupApi } from '~/utils/api'
+import { groupApi, authApi } from '~/utils/api'
 
 declare const gapi: any
 
@@ -20,68 +20,70 @@ export default Vue.extend({
   },
   mounted() {
     liff.init({ liffId: '1655194495-1azOVWld' }).then(async () => {
-      // if (liff.isLoggedIn()) {
-      console.log('Login')
-      /* const LINEprofile = await liff.getProfile()
-      const LINEemail = await liff.getDecodedIDToken()?.email
-      await this.$axios
-        .$post(
-          authApi().createCustomToken(),
-          {
-            access_token: liff.getAccessToken(),
-            id: LINEprofile.userId,
-            displayName: LINEprofile.displayName,
-            pictureUrl: LINEprofile.pictureUrl,
-            email: LINEemail,
-          },
-          {
-            headers: {
-              'Content-Type': 'application/json',
+      if (liff.isLoggedIn()) {
+        console.log('Login')
+        const LINEprofile = await liff.getProfile()
+        const LINEemail = await liff.getDecodedIDToken()?.email
+        await this.$axios
+          .$post(
+            authApi().createCustomToken(),
+            {
+              access_token: liff.getAccessToken(),
+              id: LINEprofile.userId,
+              displayName: LINEprofile.displayName,
+              pictureUrl: LINEprofile.pictureUrl,
+              email: LINEemail,
             },
-          }
-        )
-        .then((res: any) => {
-          console.log(res)
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res: any) => {
+            console.log(res)
 
-          this.$fire.auth
-            .signInWithCustomToken(res.firebase_token)
-            .then((r) => {
-              console.log(r)
-            })
-            .catch((error: any) => {
-              // Handle Errors here.
-              console.log(error)
-            })
-        }) */
+            this.$fire.auth
+              .signInWithCustomToken(res.firebase_token)
+              .then((r) => {
+                console.log(r)
+              })
+              .catch((error: any) => {
+                // Handle Errors here.
+                console.log(error)
+              })
+          })
 
-      await gapi.load('client:auth2', async () => {
-        console.log('loaded client')
-        await gapi.client
-          .init({
-            apiKey: process.env.FIREBASE_API_KEY,
-            clientId: process.env.GCP_CLIENTID,
-            discoveryDocs: [
-              'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
-            ],
-            scope: 'https://www.googleapis.com/auth/calendar',
-          })
-          .then(async () => {
-            await this.googleSignin()
-            await this.createEventonCalendar()
-          })
-      })
-      /* } else {
+        await gapi.load('client:auth2', async () => {
+          console.log('loaded client')
+          await gapi.client
+            .init({
+              apiKey: process.env.FIREBASE_API_KEY,
+              clientId: process.env.GCP_CLIENTID,
+              discoveryDocs: [
+                'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
+              ],
+              scope: 'https://www.googleapis.com/auth/calendar',
+            })
+            .then(async () => {
+              await this.googleSignin()
+              await this.createEventonCalendar()
+            })
+        })
+      } else {
         console.log('Not Login')
 
         liff.login()
-      } */
+      }
     })
   },
   methods: {
     fetchData() {
       return new Promise(async (resolve, reject) => {
+        const groupId = this.$route.query.groupId
         const getEventDetail = await this.$axios.get(
-          groupApi('Cb34ad23b226c50f08c67308a3e75955a').getEventDetailWId()
+          // @ts-expect-error
+          groupApi(groupId).getEventDetailWId()
         )
         console.log(getEventDetail.data.data)
         resolve(getEventDetail.data.data)
@@ -103,7 +105,13 @@ export default Vue.extend({
           dateTime: this.$dayjs.unix(rawEvent.eventDateTime._seconds).format(),
           timeZone: 'Asia/Bangkok',
         },
-        endTimeUnspecified: true,
+        end: {
+          dateTime: this.$dayjs
+            .unix(rawEvent.eventDateTime._seconds)
+            .add(1, 'hour')
+            .format(),
+          timeZone: 'Asia/Bangkok',
+        },
         reminders: {
           useDefault: false,
           overrides: [
@@ -114,12 +122,12 @@ export default Vue.extend({
       }
       console.log(calEvent)
 
-      const request = await gapi.client.calendar.events.insert({
+      const request = gapi.client.calendar.events.insert({
         calendarId: 'primary',
         resource: calEvent,
       })
 
-      request.execute((event: any) => {
+      request.execute(function (event: any) {
         console.log('Event created: ' + event.htmlLink)
       })
     },
