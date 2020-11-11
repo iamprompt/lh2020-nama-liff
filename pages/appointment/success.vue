@@ -18,6 +18,7 @@
           w="100%"
           variant="solid"
           mb="3"
+          @click="addtoCalendarHandler"
         >
           เพิ่มลงปฏิทินของคุณ
         </CButton>
@@ -26,3 +27,24 @@
     </CBox>
   </div>
 </template>
+
+<script lang="ts">
+import liff from '@line/liff'
+import Vue from 'vue'
+export default Vue.extend({
+  data() {
+    return {}
+  },
+  methods: {
+    addtoCalendarHandler() {
+      liff.openWindow({
+        url: 'http://localhost:3000/appointment/addtoCalendar?groupId=11111',
+        external: true,
+      })
+    },
+    closeHandler() {
+      liff.closeWindow()
+    },
+  },
+})
+</script>

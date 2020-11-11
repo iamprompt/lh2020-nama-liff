@@ -128,6 +128,22 @@
         </CBox>
       </CGrid>
     </CBox>
+
+    <CModal
+      :is-open="modal.show"
+      :on-close="modalClose"
+      :close-on-overlay-click="false"
+      is-centered
+    >
+      <CModalContent ref="content">
+        <CModalHeader>{{ modal.title }}</CModalHeader>
+        <CModalBody>{{ modal.message }}</CModalBody>
+        <CModalFooter>
+          <CButton @click="modalClose">ปิด</CButton>
+        </CModalFooter>
+      </CModalContent>
+      <CModalOverlay />
+    </CModal>
   </div>
 </template>
 
@@ -139,6 +155,11 @@ import { groupApi } from '~/utils/api'
 export default Vue.extend({
   data() {
     return {
+      modal: {
+        show: true,
+        title: '',
+        message: '',
+      },
       eventDetail: this.$store.getters.getEvent,
       eventAttendee: this.$store.getters.getAttendee as Array<string>,
       groupMembers: this.$store.getters.getGMembers as Array<ILINEFriends>,
@@ -172,6 +193,12 @@ export default Vue.extend({
     },
   },
   methods: {
+    modalOpen() {
+      this.modal.show = true
+    },
+    modalClose() {
+      this.modal.show = false
+    },
     backHandler() {
       // this.$store.dispatch('setAttendee', this.selectedAttendee)
       this.$router.push('/appointment/selectFriends')
@@ -212,16 +239,22 @@ export default Vue.extend({
         const LINEContext = await liff.getContext()
 
         if (LINEContext !== null) {
-          const sendData = await this.$axios.$post(
-            groupApi(LINEContext.groupId).createEvent(),
-            payload,
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          )
-          console.log(sendData)
+          try {
+            const sendData = await this.$axios.$post(
+              groupApi(LINEContext.groupId).createEvent(),
+              payload,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }
+            )
+            console.log(sendData)
+          } catch (error) {
+            this.modal.title = 'เกิดข้อผิดพลาด'
+            this.modal.message = 'สร้างนัดหมายได้ทีละนัดหมายน้าาาา'
+            this.modal.show = true
+          }
         }
       }
 

@@ -13,5 +13,9 @@ module.exports = {
   ],
   plugins: ['prettier'],
   // add your custom rules here
-  rules: {},
+  rules: {
+    'no-async-promise-executor': 0,
+    '@typescript-eslint/no-unused-vars': 0,
+    'no-unused-vars': 0,
+  },
 }

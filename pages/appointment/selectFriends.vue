@@ -106,6 +106,7 @@
 </template>
 
 <script lang="ts">
+import liff from '@line/liff'
 import Vue from 'vue'
 import { groupApi } from '~/utils/api'
 
@@ -188,12 +189,15 @@ export default Vue.extend({
     async fetchData() {
       // Cb34ad23b226c50f08c67308a3e75955a
       if (this.$store.getters.getGMembers.length === 0) {
-        const getGroupMembers = await this.$axios.get(
-          groupApi('Cb34ad23b226c50f08c67308a3e75955a').getGroupMembers()
-        )
-        // console.log(getGroupMembers.data.data.profile)
-        this.groupMembers = getGroupMembers.data.data.profile
-        this.$store.dispatch('setGMembers', this.groupMembers)
+        const LINEContext = await liff.getContext()
+        if (LINEContext !== null) {
+          const getGroupMembers = await this.$axios.get(
+            groupApi(LINEContext.groupId).getGroupMembers()
+          )
+          // console.log(getGroupMembers.data.data.profile)
+          this.groupMembers = getGroupMembers.data.data.profile
+          this.$store.dispatch('setGMembers', this.groupMembers)
+        }
       }
     },
     backHandler() {

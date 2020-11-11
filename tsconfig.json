@@ -34,7 +34,7 @@
       "@line/liff",
       "@nuxtjs/firebase",
       "@nuxtjs/axios",
-      "@types/gapi"
+      "gapi"
     ]
   },
   "exclude": [
