@@ -23,10 +23,9 @@
 import Vue from 'vue'
 import liff from '@line/liff'
 import { authApi } from '~/utils/api'
+require('dotenv').config()
 
 declare const gapi: any
-
-require('dotenv').config()
 
 export default Vue.extend({
   data() {
