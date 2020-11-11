@@ -26,6 +26,8 @@ import { authApi } from '~/utils/api'
 
 declare const gapi: any
 
+require('dotenv').config()
+
 export default Vue.extend({
   data() {
     return {}
