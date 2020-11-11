@@ -121,6 +121,7 @@
             variant-color="orange"
             variant="solid"
             w="100%"
+            @click="submitTheEvent"
           >
             (3/3) บันทึกและส่ง
           </CButton>
@@ -185,6 +186,9 @@ export default Vue.extend({
       const eventDetail = this.$store.getters.getEvent
       const eventParticipant: string[] = this.$store.getters.getAttendee
 
+      console.log(eventDetail)
+      console.log(eventParticipant)
+
       const LINEprofile = await liff.getProfile()
       const payload = {
         eventName: eventDetail.eventName,
@@ -207,6 +211,8 @@ export default Vue.extend({
         }),
         ownerId: LINEprofile.userId,
       }
+
+      console.log(payload)
 
       const LINEContext = await liff.getContext()
 
