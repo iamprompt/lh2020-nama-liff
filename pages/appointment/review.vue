@@ -185,49 +185,47 @@ export default Vue.extend({
     async submitTheEvent() {
       const eventDetail = this.$store.getters.getEvent
       const eventParticipant: string[] = this.$store.getters.getAttendee
+      if (liff.isLoggedIn()) {
+        const LINEprofile = await liff.getProfile()
+        const payload = {
+          eventName: eventDetail.eventName,
+          eventDate: eventDetail.eventDate,
+          eventTime: eventDetail.eventTime,
+          eventStatus: 'active',
+          eventDateTime: this.$fireModule.firestore.Timestamp.fromDate(
+            this.$dayjs(
+              `${eventDetail.eventDate}T${eventDetail.eventTime}:00+07:00`
+            ).toDate()
+          ),
+          eventLocation: eventDetail.eventLocation,
+          needUpdate: eventDetail.needUpdate,
+          remindFreq: eventDetail.remindFreq,
+          eventAttendee: eventParticipant.map((attendee) => {
+            return {
+              userId: attendee,
+              status:
+                attendee === LINEprofile.userId ? 'acknowledged' : 'unseen',
+            }
+          }),
+          ownerId: LINEprofile.userId,
+        }
+        const LINEContext = await liff.getContext()
 
-      console.log(eventDetail)
-      console.log(eventParticipant)
-
-      const LINEprofile = await liff.getProfile()
-      const payload = {
-        eventName: eventDetail.eventName,
-        eventDate: eventDetail.eventDate,
-        eventTime: eventDetail.eventTime,
-        eventStatus: 'active',
-        eventDateTime: this.$fireModule.firestore.Timestamp.fromDate(
-          this.$dayjs(
-            `${eventDetail.eventDate}T${eventDetail.eventTime}:00+07:00`
-          ).toDate()
-        ),
-        eventLocation: eventDetail.eventLocation,
-        needUpdate: eventDetail.needUpdate,
-        remindFreq: eventDetail.remindFreq,
-        eventAttendee: eventParticipant.map((attendee) => {
-          return {
-            userId: attendee,
-            status: attendee === LINEprofile.userId ? 'acknowledged' : 'unseen',
-          }
-        }),
-        ownerId: LINEprofile.userId,
+        if (LINEContext !== null) {
+          const sendData = await this.$axios.$post(
+            groupApi(LINEContext.groupId).createEvent(),
+            payload,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          console.log(sendData)
+        }
       }
 
-      console.log(payload)
-
-      const LINEContext = await liff.getContext()
-
-      if (LINEContext !== null) {
-        const sendData = await this.$axios.$post(
-          groupApi(LINEContext.groupId).createEvent(),
-          payload,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          }
-        )
-        console.log(sendData)
-      }
+      this.$router.push('/appointment/success')
     },
   },
 })
