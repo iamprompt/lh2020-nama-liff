@@ -23,7 +23,6 @@
 import Vue from 'vue'
 import liff from '@line/liff'
 import { authApi } from '~/utils/api'
-require('dotenv').config()
 
 declare const gapi: any
 
@@ -58,9 +57,9 @@ export default Vue.extend({
 
             this.$fire.auth
               .signInWithCustomToken(res.firebase_token)
-              .then(async (r) => {
+              .then((r) => {
                 console.log(r)
-                gapi.load('client', () => {
+                gapi.load('client:auth2', () => {
                   console.log('loaded client')
 
                   gapi.client.init({
@@ -73,7 +72,7 @@ export default Vue.extend({
                   })
                 })
 
-                const events = await gapi.client.calendar.events.list({
+                const events = gapi.client.calendar.events.list({
                   calendarId: 'primary',
                   timeMin: new Date().toISOString(),
                   showDeleted: false,

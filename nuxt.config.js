@@ -33,6 +33,7 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/dayjs',
     '@nuxtjs/firebase',
+    '@nuxtjs/dotenv',
   ],
 
   chakra: {
@@ -57,6 +58,11 @@ export default {
     locales: ['en', 'th'],
     defaultLocale: 'th',
     plugins: [], // Your Day.js plugin
+  },
+
+  env: {
+    FIREBASE_API_KEY: process.env.FIREBASE_API_KEY,
+    GCP_CLIENTID: process.env.GCP_CLIENTID,
   },
 
   firebase: {
