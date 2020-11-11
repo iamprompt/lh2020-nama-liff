@@ -26,6 +26,7 @@
     "@nuxtjs/dayjs": "^1.2.0",
     "@nuxtjs/emotion": "^0.0.1",
     "@nuxtjs/firebase": "^7.1.0",
+    "@types/gapi": "^0.0.39",
     "core-js": "^3.6.5",
     "dotenv": "^8.2.0",
     "firebase": "^8.0.1",
