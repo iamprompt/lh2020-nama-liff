@@ -45,6 +45,7 @@ jobs:
           FIREBASE_MESSAGING_SENDER_ID: '${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}'
           APP_ID: '${{ secrets.APP_ID }}'
           MEASUREMENT_ID: '${{ secrets.MEASUREMENT_ID }}'
+          GCP_CLIENTID: '${{ secrets.GCP_CLIENTID }}'
 
       - name: Deploy to Firebase 🔥
         uses: FirebaseExtended/action-hosting-deploy@v0
