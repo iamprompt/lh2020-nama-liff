@@ -147,7 +147,7 @@ export default Vue.extend({
   computed: {
     _eventDateTime() {
       // @ts-expect-error
-      return `${this.eventDetail.eventDate} ${this.eventDetail.eventTime} UTC+7`
+      return `${this.eventDetail.eventDate} ${this.eventDetail.eventTime}`
     },
     _eventDate() {
       // @ts-expect-error
@@ -197,7 +197,7 @@ export default Vue.extend({
         eventStatus: 'active',
         eventDateTime: this.$fireModule.firestore.Timestamp.fromDate(
           this.$dayjs(
-            `${eventDetail.eventDate} ${eventDetail.eventTime} UTC+7`
+            `${eventDetail.eventDate}T${eventDetail.eventTime}:00+07:00`
           ).toDate()
         ),
         eventLocation: eventDetail.eventLocation,
@@ -219,7 +219,12 @@ export default Vue.extend({
       if (LINEContext !== null) {
         const sendData = await this.$axios.$post(
           groupApi(LINEContext.groupId).createEvent(),
-          payload
+          payload,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
         )
         console.log(sendData)
       }

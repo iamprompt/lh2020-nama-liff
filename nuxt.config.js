@@ -78,6 +78,7 @@ export default {
     },
     services: {
       auth: true, // Just as example. Can be any other service.
+      firestore: true,
       functions: {
         location: 'asia-northeast1',
         // emulatorPort: 5001,
