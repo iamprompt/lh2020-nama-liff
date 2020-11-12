@@ -22,7 +22,14 @@
         >
           เพิ่มลงปฏิทินของคุณ
         </CButton>
-        <CButton variant-color="orange" w="100%" variant="solid"> ปิด </CButton>
+        <CButton
+          variant-color="orange"
+          w="100%"
+          variant="solid"
+          @click="closeHandler"
+        >
+          ปิด
+        </CButton>
       </CButtonGroup>
     </CBox>
   </div>

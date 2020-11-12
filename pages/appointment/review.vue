@@ -143,7 +143,7 @@
         <CModalHeader>{{ modal.title }}</CModalHeader>
         <CModalBody>{{ modal.message }}</CModalBody>
         <CModalFooter>
-          <CButton @click="liff.closeWindow()">ปิด</CButton>
+          <CButton @click="modalClose">ปิด</CButton>
         </CModalFooter>
       </CModalContent>
       <CModalOverlay />
@@ -202,6 +202,7 @@ export default Vue.extend({
     },
     modalClose() {
       this.modal.show = false
+      liff.closeWindow()
     },
     backHandler() {
       // this.$store.dispatch('setAttendee', this.selectedAttendee)
