@@ -68,7 +68,7 @@
 
             <!-- Location -->
             <CText color="#828282" mt="2" mb="2">สถานที่</CText>
-            <CText mt="2" mb="2">{{ venue }}</CText>
+            <CText mt="2" mb="2">{{ eventLocation }}</CText>
 
             <!-- invite -->
             <CText color="#828282" mt="2" mb="2">ผู้ร่วมนัด</CText>
@@ -77,11 +77,11 @@
             <!-- Users -->
             <CAvatarGroup justify-self="end" :max="maxUsers">
               <CAvatar
-                v-for="user in users"
-                :key="user.id"
-                :src="user.src"
-                :name="user.name"
-                :alt="user.alt"
+                v-for="user in eventAttendee"
+                :key="user.userId"
+                :src="user.pictureUrl"
+                :name="user.displayName"
+                :alt="user.displayName"
               />
             </CAvatarGroup>
 
@@ -110,8 +110,11 @@
 </template>
 
 <script lang="ts">
-import { css } from 'emotion'
+import liff from '@line/liff'
 import dayjs from 'dayjs'
+import { css } from 'emotion'
+
+import { groupApi } from '~/utils/api'
 import {
   eventDate,
   eventTime,
@@ -130,9 +133,9 @@ export default {
 
       eventDate,
       eventTime,
-      venue,
-      users,
-      isUpdate,
+      eventLocation: venue,
+      eventAttendee: users,
+      needUpdate: isUpdate,
       remindFreq,
     }
   },
@@ -143,8 +146,15 @@ export default {
       flex-wrap: wrap;
     `,
     _isUpdate: () => (isUpdate ? 'เปิดการใช้งาน' : 'ปิดการใช้งาน'),
-    _eventDate: () => dayjs(eventDate).format('DD MMM YYYY'),
-    _eventTime: () => dayjs(eventDate + ' ' + eventTime).format('HH:mm A'),
+    _eventDate() {
+      return dayjs(this.eventDate).format('DD MMM YYYY')
+    },
+    _eventTime() {
+      return dayjs(this.eventDate + ' ' + this.eventTime).format('HH:mm A')
+    },
+  },
+  mounted() {
+    this.fetchData()
   },
   methods: {
     translateRemindFreq(val: string, index: number) {
@@ -166,6 +176,31 @@ export default {
       }
 
       return msg
+    },
+    updateData(data: any) {
+      this.eventDate = data.eventDate
+      this.eventTime = data.eventTime
+      this.eventLocation = data.eventLocation
+      this.eventAttendee = data.eventAttendee
+      this.needUpdate = data.needUpdate
+      this.remindFreq = Object.keys(data.remindFreq)
+    },
+    async fetchData() {
+      // Cb34ad23b226c50f08c67308a3e75955a
+      const eventDetail = await this.$axios.get(
+        groupApi('Cb34ad23b226c50f08c67308a3e75955a').getEventDetail()
+      )
+      console.log(eventDetail)
+      this.updateData(eventDetail.data.data)
+
+      const LINEContext = await liff.getContext()
+      if (LINEContext !== null) {
+        const eventDetail = await this.$axios.get(
+          groupApi(LINEContext.groupId).getEventDetail()
+        )
+
+        console.log(eventDetail)
+      }
     },
   },
 }

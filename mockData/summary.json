@@ -4,39 +4,39 @@
   "venue": "LINE Office Gaysorn Tower Fl.17",
   "users": [
     {
-      "id": 1,
-      "src": "pop",
-      "name": "ora",
+      "userId": 1,
+      "pictureUrl": "pop",
+      "displayName": "ora",
       "alt": "ora"
     },
     {
-      "id": 2,
-      "src": "https://pbs.twimg.com/profile_images/1206997998900850688/cTXTQiHm_400x400.jpg",
-      "name": "Evan You",
+      "userId": 2,
+      "pictureUrl": "https://pbs.twimg.com/profile_images/1206997998900850688/cTXTQiHm_400x400.jpg",
+      "displayName": "Evan You",
       "alt": "Evan You"
     },
     {
-      "id": 3,
-      "src": "https://res.cloudinary.com/xtellar/image/upload/v1572857445/me_zqos4e.jpg",
-      "name": "Jonathan Bakebwa",
+      "userId": 3,
+      "pictureUrl": "https://res.cloudinary.com/xtellar/image/upload/v1572857445/me_zqos4e.jpg",
+      "displayName": "Jonathan Bakebwa",
       "alt": "Jonathan Bakebwa"
     },
     {
-      "id": 4,
-      "src": "https://pbs.twimg.com/profile_images/1169353373012897802/skPUWd6e_400x400.jpg",
-      "name": "Segun Adebayo",
+      "userId": 4,
+      "pictureUrl": "https://pbs.twimg.com/profile_images/1169353373012897802/skPUWd6e_400x400.jpg",
+      "displayName": "Segun Adebayo",
       "alt": "Segun Adebayo"
     },
     {
-      "id": 5,
-      "src": "https://pbs.twimg.com/profile_images/1169353373012897802/skPUWd6e_400x400.jpg",
-      "name": "Jirachai Chansivanon",
+      "userId": 5,
+      "pictureUrl": "https://pbs.twimg.com/profile_images/1169353373012897802/skPUWd6e_400x400.jpg",
+      "displayName": "Jirachai Chansivanon",
       "alt": "Jirachai Chansivanon"
     },
     {
-      "id": 6,
-      "src": "https://pbs.twimg.com/profile_images/1169353373012897802/skPUWd6e_400x400.jpg",
-      "name": "Segun Adebayo",
+      "userId": 6,
+      "pictureUrl": "https://pbs.twimg.com/profile_images/1169353373012897802/skPUWd6e_400x400.jpg",
+      "displayName": "Segun Adebayo",
       "alt": "Segun Adebayo"
     }
   ],
