@@ -74,7 +74,7 @@ export default Vue.extend({
         console.log('Not Login')
 
         liff.login({
-          redirectUri: 'https://nama-294515.web.app/appointment/addtoCalendar',
+          redirectUri: `${window.location.href}`,
         })
       }
     })
