@@ -254,6 +254,7 @@ export default Vue.extend({
               }
             )
             console.log(sendData)
+            this.$router.push('/appointment/success')
           } catch (error) {
             this.modal.title = 'เกิดข้อผิดพลาด'
             this.modal.message = 'สร้างนัดหมายได้ทีละนัดหมายน้าาาา'
@@ -261,8 +262,6 @@ export default Vue.extend({
           }
         }
       }
-
-      this.$router.push('/appointment/success')
     },
   },
 })
