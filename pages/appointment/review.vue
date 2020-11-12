@@ -143,7 +143,7 @@
         <CModalHeader>{{ modal.title }}</CModalHeader>
         <CModalBody>{{ modal.message }}</CModalBody>
         <CModalFooter>
-          <CButton @click="closeModal">ปิด</CButton>
+          <CButton @click="modalClose">ปิด</CButton>
         </CModalFooter>
       </CModalContent>
       <CModalOverlay />
