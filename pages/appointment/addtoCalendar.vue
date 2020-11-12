@@ -19,7 +19,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    liff.init({ liffId: '1655194495-1azOVWld' }).then(async () => {
+    liff.init({ liffId: '1655194495-7AEALMp8' }).then(async () => {
       if (liff.isLoggedIn()) {
         console.log('Login')
         const LINEprofile = await liff.getProfile()
@@ -73,7 +73,9 @@ export default Vue.extend({
       } else {
         console.log('Not Login')
 
-        liff.login()
+        liff.login({
+          redirectUri: 'https://nama-294515.web.app/appointment/addtoCalendar',
+        })
       }
     })
   },
@@ -156,7 +158,7 @@ export default Vue.extend({
       if (!googleUser.isSignedIn.get()) {
         currentUser = await gapi.auth2
           .getAuthInstance()
-          .signIn({ ux_mode: 'redirect' })
+          .signIn(/* { ux_mode: 'redirect' } */)
       } else {
         currentUser = googleUser.currentUser.get()
       }
