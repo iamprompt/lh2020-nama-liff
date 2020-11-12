@@ -20,7 +20,7 @@ export default Vue.extend({
   },
   mounted() {
     liff.init({ liffId: '1655194495-7AEALMp8' }).then(async () => {
-      if (liff.isLoggedIn()) {
+      /* if (liff.isLoggedIn()) {
         console.log('Login')
         const LINEprofile = await liff.getProfile()
         const LINEemail = await liff.getDecodedIDToken()?.email
@@ -52,31 +52,31 @@ export default Vue.extend({
                 // Handle Errors here.
                 console.log(error)
               })
-          })
+          }) */
 
-        await gapi.load('client:auth2', async () => {
-          console.log('loaded client')
-          await gapi.client
-            .init({
-              apiKey: process.env.FIREBASE_API_KEY,
-              clientId: process.env.GCP_CLIENTID,
-              discoveryDocs: [
-                'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
-              ],
-              scope: 'https://www.googleapis.com/auth/calendar',
-            })
-            .then(async () => {
-              await this.googleSignin()
-              await this.createEventonCalendar()
-            })
-        })
-      } else {
+      await gapi.load('client:auth2', async () => {
+        console.log('loaded client')
+        await gapi.client
+          .init({
+            apiKey: process.env.FIREBASE_API_KEY,
+            clientId: process.env.GCP_CLIENTID,
+            discoveryDocs: [
+              'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
+            ],
+            scope: 'https://www.googleapis.com/auth/calendar',
+          })
+          .then(async () => {
+            await this.googleSignin()
+            await this.createEventonCalendar()
+          })
+      })
+      /* } else {
         console.log('Not Login')
 
         liff.login({
           redirectUri: `${window.location.href}`,
         })
-      }
+      } */
     })
   },
   methods: {
