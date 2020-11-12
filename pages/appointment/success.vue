@@ -38,7 +38,9 @@ export default Vue.extend({
   methods: {
     addtoCalendarHandler() {
       liff.openWindow({
-        url: 'http://localhost:3000/appointment/addtoCalendar?groupId=11111',
+        url: `${window.location.origin}/appointment/addtoCalendar?groupId=${
+          liff.getContext()?.groupId
+        }`,
         external: true,
       })
     },
