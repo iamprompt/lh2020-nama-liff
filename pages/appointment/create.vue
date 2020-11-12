@@ -47,7 +47,7 @@
     </CBox>
 
     <!-- Form -->
-    <CBox p="4" class="forms">
+    <CBox p="4" pb="90px" class="forms">
       <!-- [TODO : Template for Date & Time Picker] Row 1 | Date & time -->
       <CGrid template-columns="60% auto" gap="10px" mb="4">
         <!-- Date -->
@@ -142,9 +142,13 @@
                   v-for="noti in notificationLabel"
                   :key="noti.slug"
                   p="1"
+                  px="2"
                   mr="5px"
                   font-size="sm"
                   rounded="12px"
+                  :font-weight="
+                    eventForm.remindFreq[noti.slug] ? 'bold' : 'normal'
+                  "
                   :bg="
                     eventForm.remindFreq[noti.slug]
                       ? 'rgba(240, 97, 41, 0.3);'
@@ -172,16 +176,32 @@
           </CGrid>
         </CBox>
       </CGrid>
-
-      <c-button
-        right-icon="arrow-forward"
-        variant-color="orange"
-        variant="solid"
-        w="100%"
-        @click="next"
-      >
-        (1/3) ต่อไป
-      </c-button>
+    </CBox>
+    <CBox
+      pos="fixed"
+      bottom="0"
+      w="100%"
+      px="4"
+      py="4"
+      bg="white"
+      border-radius="xl"
+      box-shadow="0px 3px 20px rgba(0, 0, 0, 0.1)"
+    >
+      <CGrid template-columns="auto" column-gap="15px">
+        <CBox>
+          <CButton
+            right-icon="arrow-forward"
+            variant-color="orange"
+            variant="solid"
+            size="lg"
+            rounded="12px"
+            w="100%"
+            @click="nextHandler"
+          >
+            (1/3) ต่อไป
+          </CButton>
+        </CBox>
+      </CGrid>
     </CBox>
   </div>
 </template>
@@ -278,7 +298,7 @@ export default Vue.extend({
     })
   },
   methods: {
-    next() {
+    nextHandler() {
       this.$store.dispatch('setEventInfo', this.eventForm)
       this.$router.push('/appointment/selectFriends')
     },

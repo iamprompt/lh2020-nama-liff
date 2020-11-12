@@ -9,6 +9,7 @@
       bg="#f2f2f2"
       p="5"
       pt="10"
+      pb="90px"
     >
       <CHeading font-size="xl" font-weight="bold" text-align="center" mb="12">
         ตัวอย่างข้อความก่อนส่ง
@@ -27,7 +28,6 @@
           rounded="12px"
           pos="relative"
           box-shadow="0px 5px 20px rgba(0, 0, 0, 0.08);"
-          transform="rotate(5deg)"
         >
           <!-- header box -->
           <CBox
@@ -110,6 +110,8 @@
             variant-color="white"
             variant="outline"
             w="100%"
+            size="lg"
+            rounded="12px"
             @click="backHandler"
           >
             ย้อนกลับ
@@ -121,6 +123,8 @@
             variant-color="orange"
             variant="solid"
             w="100%"
+            size="lg"
+            rounded="12px"
             @click="submitTheEvent"
           >
             (3/3) บันทึกและส่ง
@@ -139,7 +143,7 @@
         <CModalHeader>{{ modal.title }}</CModalHeader>
         <CModalBody>{{ modal.message }}</CModalBody>
         <CModalFooter>
-          <CButton @click="modalClose">ปิด</CButton>
+          <CButton @click="liff.closeWindow()">ปิด</CButton>
         </CModalFooter>
       </CModalContent>
       <CModalOverlay />
@@ -156,7 +160,7 @@ export default Vue.extend({
   data() {
     return {
       modal: {
-        show: true,
+        show: false,
         title: '',
         message: '',
       },

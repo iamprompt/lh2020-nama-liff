@@ -84,6 +84,8 @@
             variant-color="white"
             variant="outline"
             w="100%"
+            size="lg"
+            rounded="12px"
             @click="backHandler"
           >
             ย้อนกลับ
@@ -94,6 +96,8 @@
             right-icon="arrow-forward"
             variant-color="orange"
             variant="solid"
+            size="lg"
+            rounded="12px"
             w="100%"
             @click="nextHandler"
           >

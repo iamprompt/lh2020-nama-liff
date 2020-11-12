@@ -40,9 +40,8 @@ export default {
     extendTheme: {
       fonts: {
         heading:
-          '"SF Pro TH Display", "SF Pro Display", "Helvetica Neue", "Helvetica", "Arial", sans-serif',
-        body:
-          '"SF Pro Display", "Thonburi", "Helvetica Neue", "Helvetica", "Arial", sans-serif',
+          '"Thonburi", "Helvetica Neue", "Helvetica", "Arial", sans-serif',
+        body: '"Thonburi", "Helvetica Neue", "Helvetica", "Arial", sans-serif',
       },
     },
     config: {
