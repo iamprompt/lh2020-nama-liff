@@ -250,9 +250,9 @@ export default Vue.extend({
     },
     updateFriendsList() {
       // @ts-expect-error
-      this.friendLists = this.eventDetail.eventAttendee
+      this.friendLists = this.eventDetail.attendeeList
       // @ts-expect-error
-      this.friends = this.eventDetail.eventAttendee
+      this.friends = this.eventDetail.attendeeList
     },
   },
 })

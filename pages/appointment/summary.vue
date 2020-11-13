@@ -221,7 +221,7 @@ export default Vue.extend({
 
       this.eventDetail = rawEvent
       // @ts-expect-error
-      this.friendLists = this.eventDetail.eventAttendee
+      this.friendLists = this.eventDetail.attendeeList
       // @ts-expect-error
       this.eventDetail.needUpdate = this.eventDetail.needUpdate
         ? 'เปิดการใช้งาน'

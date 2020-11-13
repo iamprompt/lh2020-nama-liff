@@ -165,7 +165,7 @@ export default Vue.extend({
         message: '',
       },
       eventDetail: this.$store.getters.getEvent,
-      eventAttendee: this.$store.getters.getAttendee as Array<string>,
+      attendeeList: this.$store.getters.getAttendee as Array<string>,
       groupMembers: this.$store.getters.getGMembers as Array<ILINEFriends>,
     }
   },
@@ -188,7 +188,7 @@ export default Vue.extend({
         this.groupMembers
           // @ts-expect-error
           .filter((member) => {
-            return this.eventAttendee.includes(member.userId)
+            return this.attendeeList.includes(member.userId)
           })
           // @ts-expect-error
           .map((m) => `@${m.displayName}`)
@@ -232,7 +232,7 @@ export default Vue.extend({
           eventLocation: eventDetail.eventLocation,
           needUpdate: eventDetail.needUpdate,
           remindFreq: eventDetail.remindFreq,
-          eventAttendee: eventParticipant.map((attendee) => {
+          attendeeList: eventParticipant.map((attendee) => {
             return {
               userId: attendee,
               status:
