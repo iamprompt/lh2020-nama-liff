@@ -104,8 +104,9 @@
 </template>
 
 <script lang="ts">
+import liff from '@line/liff'
 import Vue from 'vue'
-import { groupApi } from '~/utils/api'
+import { authApi, groupApi } from '~/utils/api'
 interface Istatus {
   [index: string]: {
     title: string
@@ -162,16 +163,50 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.fetchData()
+    liff
+      .init({ liffId: '1655194495-dmpj59zq' })
+      .then()
+      .then(async () => {
+        if (liff.isLoggedIn()) {
+          console.log('Login')
+          const LINEprofile = await liff.getProfile()
+          const LINEemail = await liff.getDecodedIDToken()?.email
+          await this.$axios
+            .$post(
+              authApi().createCustomToken(),
+              {
+                access_token: liff.getAccessToken(),
+                id: LINEprofile.userId,
+                displayName: LINEprofile.displayName,
+                pictureUrl: LINEprofile.pictureUrl,
+                email: LINEemail,
+              },
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }
+            )
+            .then((res: any) => {
+              console.log(res)
 
-    this.filterStatus()
+              this.$fire.auth
+                .signInWithCustomToken(res.firebase_token)
+                .catch((error: any) => {
+                  // Handle Errors here.
+                  console.log(error)
+                })
+            })
+        } else {
+          console.log('Not Login')
+
+          // liff.login()
+        }
+      })
+
+    this.fetchData()
   },
   methods: {
-    filterStatus(): void {
-      this.friendLists.forEach((friend) => {
-        this.statuses[friend.status].friends.push(friend)
-      })
-    },
     statusFriend(status: string) {
       return this.friends.filter((a) => {
         return a.status === status

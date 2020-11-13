@@ -8,8 +8,7 @@ export const groupApi = (groupId: string) => {
   return {
     getGroupMembers: () => `${getUrl('getGroupMembers')}`,
 
-    getEventDetail: () =>
-      `${getUrl('event')}`,
+    getEventDetail: () => `${getUrl('event')}`,
 
     getEventDetailWId: () => `${getUrl('event')}`,
     createEvent: () => `${getUrl('event')}`,
