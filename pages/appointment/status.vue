@@ -182,7 +182,7 @@ export default Vue.extend({
     const getEventDetail = await this.$axios.get(
       groupApi(
         LINEContext?.groupId || 'Ce78c9d91679c5c958514dee41e53ab19'
-      ).getEventDetailWId()
+      ).getEventDetail()
     )
 
     console.log(getEventDetail)
@@ -227,7 +227,7 @@ export default Vue.extend({
       const LINEContext = await liff.getContext()
       if (LINEContext !== null) {
         const getEventDetail = await this.$axios.get(
-          groupApi(LINEContext.groupId).getEventDetailWId()
+          groupApi(LINEContext.groupId).getEventDetail()
         )
         console.log(getEventDetail.data.data)
 

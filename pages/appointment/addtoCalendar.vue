@@ -1,6 +1,70 @@
 <template>
   <div class="container">
-    <CBox bg="#f2f2f2" w="100ve" min-h="100vh"></CBox>
+    <CBox
+      w="100vw"
+      min-h="100vh"
+      bg="#f2f2f2"
+      d="flex"
+      justify-content="center"
+      align-items="center"
+      flex-dir="column"
+      text-align="center"
+    >
+      <div>
+        <CHeading color="#4F4F4F">{{ title }}</CHeading>
+
+        <c-image
+          v-if="isLoaded"
+          w="14rem"
+          mt="3rem"
+          mx="auto"
+          :src="require('~/assets/images/icons/GCal.svg')"
+        />
+        <c-image
+          v-else
+          mt="3rem"
+          mx="auto"
+          :src="require('~/assets/images/nama_loader.png')"
+        />
+
+        <CText v-if="isLoaded" font-size="1.5rem" mt="3rem">
+          เพิ่มนัดลงใน Google Calendar<br />สำเร็จแล้ว
+        </CText>
+      </div>
+
+      <CBox position="fixed" w="100%" p="1rem" bottom="0">
+        <CGrid v-if="isLoaded" template-columns="auto" row-gap="15px">
+          <CBox>
+            <CButton
+              bg="#FFFFFF"
+              color="#4258F4"
+              variant="solid"
+              size="lg"
+              rounded="12px"
+              w="100%"
+              shadow="0px 1px 4px 0px rgba(0, 0, 0, .06)"
+              @click="goGCal"
+            >
+              ไปที่ Google Calendar
+            </CButton>
+          </CBox>
+
+          <CBox>
+            <CButton
+              bg="#00B900"
+              color="#ffffff"
+              variant="solid"
+              size="lg"
+              rounded="12px"
+              w="100%"
+              @click="goBackLine"
+            >
+              กลับไปที่ไลน์
+            </CButton>
+          </CBox>
+        </CGrid>
+      </CBox>
+    </CBox>
   </div>
 </template>
 
@@ -16,89 +80,56 @@ export default Vue.extend({
   data() {
     return {
       event: {},
+      isLoaded: false,
     }
   },
+  computed: {
+    title(): string {
+      return this.isLoaded
+        ? 'ผมเพิ่มลงในปฎิทินให้แล้วน้า'
+        : 'ผมกำลังเพิ่มข้อมูลลงในปฏิทินให้นะฮะ...'
+    },
+  },
   mounted() {
-    liff.init({ liffId: '1655194495-7AEALMp8' }).then(async () => {
-      /* if (liff.isLoggedIn()) {
-        console.log('Login')
-        const LINEprofile = await liff.getProfile()
-        const LINEemail = await liff.getDecodedIDToken()?.email
-        await this.$axios
-          .$post(
-            authApi().createCustomToken(),
-            {
-              access_token: liff.getAccessToken(),
-              id: LINEprofile.userId,
-              displayName: LINEprofile.displayName,
-              pictureUrl: LINEprofile.pictureUrl,
-              email: LINEemail,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          )
-          .then((res: any) => {
-            console.log(res)
-
-            this.$fire.auth
-              .signInWithCustomToken(res.firebase_token)
-              .then((r) => {
-                console.log(r)
-              })
-              .catch((error: any) => {
-                // Handle Errors here.
-                console.log(error)
-              })
-          }) */
-
-      await gapi.load('client:auth2', async () => {
-        console.log('loaded client')
-        await gapi.client
-          .init({
-            apiKey: process.env.FIREBASE_API_KEY,
-            clientId: process.env.GCP_CLIENTID,
-            discoveryDocs: [
-              'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
-            ],
-            scope: 'https://www.googleapis.com/auth/calendar',
-          })
-          .then(async () => {
-            await this.googleSignin()
-            await this.createEventonCalendar()
-          })
-      })
-      /* } else {
-        console.log('Not Login')
-
-        liff.login({
-          redirectUri: `${window.location.href}`,
-        })
-      } */
+    this.initProviders().then(async () => {
+      // Do Google Sign In
+      await this.googleSignin()
+      // Add Event to calendar
+      await this.createEventonCalendar()
+      this.isLoaded = true
     })
   },
   methods: {
+    async initProviders() {
+      // Initialize LIFF
+      await liff.init({ liffId: '1655194495-7AEALMp8' })
+      // Load Client:auth2
+      await gapi.load('client:auth2')
+      // Initialize GAPIs
+      await gapi.client.int({
+        apiKey: process.env.FIREBASE_API_KEY,
+        clientId: process.env.GCP_CLIENTID,
+        discoveryDocs: [
+          'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
+        ],
+        scope: 'https://www.googleapis.com/auth/calendar',
+      })
+    },
+
     async fetchData() {
       const groupId = this.$route.query.groupId
       const getEventDetail = await this.$axios.get(
         // @ts-expect-error
-        groupApi(groupId).getEventDetailWId()
+        groupApi(groupId).getEventDetail()
       )
 
       return getEventDetail.data.data
     },
     async createEventonCalendar() {
-      // const getEventDetail = await this.$axios.get(
-      //   groupApi('Cb34ad23b226c50f08c67308a3e75955a').getEventDetailWId()
-      // )
-      // console.log(getEventDetail.data.data)
-
-      // const rawEvent = getEventDetail.data.data
+      // Sample: Group ID
+      // Cb34ad23b226c50f08c67308a3e75955a
       const rawEvent: any = await this.fetchData()
       const calEvent = {
-        // id: rawEvent.eventId,
         summary: rawEvent.eventName,
         location: rawEvent.eventLocation,
         start: {
@@ -132,8 +163,6 @@ export default Vue.extend({
       })
     },
     firebaseSignin(googleCredential: firebase.auth.OAuthCredential) {
-      // const googleProvider = new this.$fireModule.auth.GoogleAuthProvider()
-      // googleProvider.addScope('https://www.googleapis.com/auth/calendar')
       if (!this.$fire.auth.currentUser) {
         this.$fire.auth.signInWithCredential(googleCredential)
       } else {
@@ -166,6 +195,13 @@ export default Vue.extend({
         token
       )
       this.firebaseSignin(credential)
+    },
+
+    goGCal() {
+      window.open('https://calendar.google.com')
+    },
+    goBackLine() {
+      window.location.href = 'https://line.me/R/'
     },
   },
 })
