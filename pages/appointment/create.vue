@@ -301,21 +301,23 @@ export default Vue.extend({
   async beforeCreate() {
     await liff.init({ liffId: '1655194495-kxjgmBQ6' })
   },
-  async mounted() {
-    const LINEContext = await liff.getContext()
+  mounted() {
+    liff.ready.then(async () => {
+      const LINEContext = await liff.getContext()
+      console.log(LINEContext)
 
-    this.$store.dispatch('setLINEContext', LINEContext)
+      this.$store.dispatch('setLINEContext', LINEContext)
+      console.log(this.$store.getters.getLINEContext.groupId)
 
-    const getGroupMembers = await this.$axios.get(
-      groupApi(
-        LINEContext?.groupId || 'Ce78c9d91679c5c958514dee41e53ab19'
-      ).getGroupMembers()
-    )
+      const getGroupMembers = await this.$axios.get(
+        groupApi(this.$store.getters.getLINEContext.groupId).getGroupMembers()
+      )
 
-    console.log(getGroupMembers)
+      console.log(getGroupMembers)
 
-    // console.log(getGroupMembers.data.data.profile)
-    this.$store.dispatch('setGMembers', getGroupMembers.data.data.profile)
+      // console.log(getGroupMembers.data.data.profile)
+      this.$store.dispatch('setGMembers', getGroupMembers.data.data.profile)
+    })
   },
   methods: {
     nextHandler() {
