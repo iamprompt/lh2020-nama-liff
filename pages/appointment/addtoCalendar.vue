@@ -80,16 +80,14 @@ export default Vue.extend({
     })
   },
   methods: {
-    fetchData() {
-      return new Promise(async (resolve, reject) => {
-        const groupId = this.$route.query.groupId
-        const getEventDetail = await this.$axios.get(
-          // @ts-expect-error
-          groupApi(groupId).getEventDetailWId()
-        )
-        console.log(getEventDetail.data.data)
-        resolve(getEventDetail.data.data)
-      })
+    async fetchData() {
+      const groupId = this.$route.query.groupId
+      const getEventDetail = await this.$axios.get(
+        // @ts-expect-error
+        groupApi(groupId).getEventDetailWId()
+      )
+
+      return getEventDetail.data.data
     },
     async createEventonCalendar() {
       // const getEventDetail = await this.$axios.get(
