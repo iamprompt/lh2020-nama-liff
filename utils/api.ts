@@ -12,7 +12,7 @@ export const groupApi = (groupId: string) => {
     createEvent: () => `${getUrl('event')}`,
 
     updateStatus: (status: string, userId: string) =>
-      `${getUrl('status')}&status=${status}&userId=${userId}`,
+      `${getUrl('status')}&param=1&status=${status}&userId=${userId}`,
   }
 }
 
