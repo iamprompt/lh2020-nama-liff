@@ -138,7 +138,7 @@ export default Vue.extend({
     },
   },
   mounted() {
-    this.fetchData()
+    // this.fetchData()
   },
   methods: {
     listUsers() {

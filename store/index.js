@@ -40,7 +40,7 @@ export const mutations = {
     state.participatedAttendee = data
   },
   SET_GMEMBERS(state, data) {
-    state.groupMembers = [...data]
+    state.groupMembers = data
   },
 }
 

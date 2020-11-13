@@ -209,9 +209,49 @@
 <script lang="ts">
 import Vue from 'vue'
 import liff from '@line/liff'
-import { authApi } from '~/utils/api'
+import { authApi, groupApi } from '~/utils/api'
 
 export default Vue.extend({
+  fetch() {
+    liff.ready.then(async () => {
+      if (liff.isLoggedIn()) {
+        console.log(liff.getContext())
+        console.log('Login')
+        const LINEprofile = await liff.getProfile()
+        const LINEemail = await liff.getDecodedIDToken()?.email
+        await this.$axios
+          .$post(
+            authApi().createCustomToken(),
+            {
+              access_token: liff.getAccessToken(),
+              id: LINEprofile.userId,
+              displayName: LINEprofile.displayName,
+              pictureUrl: LINEprofile.pictureUrl,
+              email: LINEemail,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          .then((res: any) => {
+            console.log(res)
+
+            this.$fire.auth
+              .signInWithCustomToken(res.firebase_token)
+              .catch((error: any) => {
+                // Handle Errors here.
+                console.log(error)
+              })
+          })
+      } else {
+        console.log('Not Login')
+
+        // liff.login()
+      }
+    })
+  },
   data() {
     return {
       todayDate: this.$dayjs().format('YYYY-MM-DD'),
@@ -258,48 +298,23 @@ export default Vue.extend({
       }
     },
   },
-  async created() {
+  async beforeCreate() {
     await liff.init({ liffId: '1655194495-kxjgmBQ6' })
-    liff.ready.then(async () => {
-      if (liff.isLoggedIn()) {
-        console.log(liff.getContext())
-        console.log('Login')
-        const LINEprofile = await liff.getProfile()
-        const LINEemail = await liff.getDecodedIDToken()?.email
-        await this.$axios
-          .$post(
-            authApi().createCustomToken(),
-            {
-              access_token: liff.getAccessToken(),
-              id: LINEprofile.userId,
-              displayName: LINEprofile.displayName,
-              pictureUrl: LINEprofile.pictureUrl,
-              email: LINEemail,
-            },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          )
-          .then((res: any) => {
-            console.log(res)
-
-            this.$fire.auth
-              .signInWithCustomToken(res.firebase_token)
-              .catch((error: any) => {
-                // Handle Errors here.
-                console.log(error)
-              })
-          })
-      } else {
-        console.log('Not Login')
-
-        // liff.login()
-      }
-    })
   },
-  mounted() {},
+  async mounted() {
+    const LINEContext = await liff.getContext()
+
+    const getGroupMembers = await this.$axios.get(
+      groupApi(
+        LINEContext?.groupId || 'Ce78c9d91679c5c958514dee41e53ab19'
+      ).getGroupMembers()
+    )
+
+    console.log(getGroupMembers)
+
+    // console.log(getGroupMembers.data.data.profile)
+    this.$store.dispatch('setGMembers', getGroupMembers.data.data.profile)
+  },
   methods: {
     nextHandler() {
       this.$store.dispatch('setEventInfo', this.eventForm)
