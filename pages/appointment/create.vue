@@ -258,9 +258,11 @@ export default Vue.extend({
       }
     },
   },
-  mounted() {
-    liff.init({ liffId: '1655194495-kxjgmBQ6' }).then(async () => {
+  async created() {
+    await liff.init({ liffId: '1655194495-kxjgmBQ6' })
+    liff.ready.then(async () => {
       if (liff.isLoggedIn()) {
+        console.log(liff.getContext())
         console.log('Login')
         const LINEprofile = await liff.getProfile()
         const LINEemail = await liff.getDecodedIDToken()?.email
@@ -297,6 +299,7 @@ export default Vue.extend({
       }
     })
   },
+  mounted() {},
   methods: {
     nextHandler() {
       this.$store.dispatch('setEventInfo', this.eventForm)
