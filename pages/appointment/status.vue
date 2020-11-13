@@ -104,7 +104,7 @@
                   <span>{{ user.displayName }}</span>
                 </CBox>
 
-                <div>{{ fromNow }}</div>
+                <div>{{ thenToNow(user.last_updated._seconds) }}</div>
               </CBox>
             </CTabPanel>
           </CTabPanels>
@@ -270,6 +270,9 @@ export default Vue.extend({
     openSummary() {
       console.log('sdfasdf')
       this.$router.push('/appointment/summary')
+    },
+    thenToNow(then: any) {
+      return this.$dayjs(then * 1000).fromNow()
     },
   },
 })
