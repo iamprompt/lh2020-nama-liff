@@ -59,7 +59,7 @@
               :key="status.title"
               d="inline-block"
             >
-              {{ status.title }}
+              {{ status.title }}({{ statusFriend(status.slug).length }})
             </CTab>
           </CTabList>
         </CBox>
