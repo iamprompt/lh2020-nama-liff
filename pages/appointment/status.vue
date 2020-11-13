@@ -120,6 +120,17 @@ interface Ifriend {
   userId: string
 }
 export default Vue.extend({
+  fetch() {
+    liff.ready.then(() => {
+      if (liff.isLoggedIn()) {
+        console.log(liff.getContext())
+        console.log('Login')
+      } else {
+        console.log('Not Login')
+        // liff.login()
+      }
+    })
+  },
   data() {
     return {
       textSearch: '',
@@ -162,49 +173,34 @@ export default Vue.extend({
       immediate: true,
     },
   },
-  mounted() {
-    liff
-      .init({ liffId: '1655194495-dmpj59zq' })
-      .then()
-      .then(async () => {
-        if (liff.isLoggedIn()) {
-          console.log('Login')
-          const LINEprofile = await liff.getProfile()
-          const LINEemail = await liff.getDecodedIDToken()?.email
-          await this.$axios
-            .$post(
-              authApi().createCustomToken(),
-              {
-                access_token: liff.getAccessToken(),
-                id: LINEprofile.userId,
-                displayName: LINEprofile.displayName,
-                pictureUrl: LINEprofile.pictureUrl,
-                email: LINEemail,
-              },
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              }
-            )
-            .then((res: any) => {
-              console.log(res)
+  async beforeCreate() {
+    await liff.init({ liffId: '1655194495-dmpj59zq' })
+  },
+  async mounted() {
+    const LINEContext = await liff.getContext()
 
-              this.$fire.auth
-                .signInWithCustomToken(res.firebase_token)
-                .catch((error: any) => {
-                  // Handle Errors here.
-                  console.log(error)
-                })
-            })
-        } else {
-          console.log('Not Login')
+    const getEventDetail = await this.$axios.get(
+      groupApi(
+        LINEContext?.groupId || 'Ce78c9d91679c5c958514dee41e53ab19'
+      ).getEventDetailWId()
+    )
 
-          // liff.login()
-        }
-      })
+    console.log(getEventDetail)
 
-    this.fetchData()
+    const rawEvent = getEventDetail.data.data
+
+    rawEvent.eventDate = this.$dayjs
+      .unix(rawEvent.eventDateTime._seconds)
+      .format('DD MMM YYYY')
+
+    rawEvent.eventTime = this.$dayjs
+      .unix(rawEvent.eventDateTime._seconds)
+      .format('HH:mm น.')
+
+    this.eventDetail = rawEvent
+    this.updateFriendsList()
+
+    // this.fetchData()
   },
   methods: {
     statusFriend(status: string) {
@@ -266,6 +262,7 @@ export default Vue.extend({
   color: #bdbdbd;
   font-weight: bold;
   &[aria-selected='true'] {
+    color: #f06129;
     background: -webkit-linear-gradient(180deg, #ff9a3d 13.02%, #f06129 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
