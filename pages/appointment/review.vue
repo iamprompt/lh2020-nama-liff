@@ -241,26 +241,23 @@ export default Vue.extend({
           }),
           ownerId: LINEprofile.userId,
         }
-        const LINEContext = await liff.getContext()
 
-        if (LINEContext !== null) {
-          try {
-            const sendData = await this.$axios.$post(
-              groupApi(LINEContext.groupId).createEvent(),
-              payload,
-              {
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              }
-            )
-            console.log(sendData)
-            this.$router.push('/appointment/success')
-          } catch (error) {
-            this.modal.title = 'เกิดข้อผิดพลาด'
-            this.modal.message = 'สร้างนัดหมายได้ทีละนัดหมายน้าาาา'
-            this.modal.show = true
-          }
+        try {
+          const sendData = await this.$axios.$post(
+            groupApi(this.$store.getters.getLINEContext.groupId).createEvent(),
+            payload,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            }
+          )
+          console.log(sendData)
+          this.$router.push('/appointment/success')
+        } catch (error) {
+          this.modal.title = 'เกิดข้อผิดพลาด'
+          this.modal.message = 'สร้างนัดหมายได้ทีละนัดหมายน้าาาา'
+          this.modal.show = true
         }
       }
     },

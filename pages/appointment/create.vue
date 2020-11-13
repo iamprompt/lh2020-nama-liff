@@ -304,6 +304,8 @@ export default Vue.extend({
   async mounted() {
     const LINEContext = await liff.getContext()
 
+    this.$store.dispatch('setLINEContext', LINEContext)
+
     const getGroupMembers = await this.$axios.get(
       groupApi(
         LINEContext?.groupId || 'Ce78c9d91679c5c958514dee41e53ab19'

@@ -15,6 +15,7 @@ export const state = () => ({
   },
   participatedAttendee: [],
   groupMembers: [],
+  LINEContext: {},
 })
 
 export const getters = {
@@ -26,6 +27,9 @@ export const getters = {
   },
   getGMembers(state) {
     return state.groupMembers
+  },
+  getLINEContext(state) {
+    return state.LINEContext
   },
 }
 
@@ -42,6 +46,9 @@ export const mutations = {
   SET_GMEMBERS(state, data) {
     state.groupMembers = data
   },
+  SET_LINECONTEXT(state, data) {
+    state.LINEContext = data
+  },
 }
 
 export const actions = {
@@ -53,5 +60,8 @@ export const actions = {
   },
   setGMembers({ commit }, data) {
     commit('SET_GMEMBERS', data)
+  },
+  setLINEContext({ commit }, data) {
+    commit('SET_LINECONTEXT', data)
   },
 }
