@@ -92,14 +92,19 @@
                 :key="user.userId"
                 pb="3"
                 align-items="center"
+                justify-content="space-between"
                 d="flex"
               >
-                <CAvatar
-                  :name="user.displayName"
-                  :src="user.pictureUrl"
-                  mr="4"
-                />
-                {{ user.displayName }}
+                <CBox d="flex" align-items="center">
+                  <CAvatar
+                    :name="user.displayName"
+                    :src="user.pictureUrl"
+                    mr="4"
+                  />
+                  <span>{{ user.displayName }}</span>
+                </CBox>
+
+                <div></div>
               </CBox>
             </CTabPanel>
           </CTabPanels>
