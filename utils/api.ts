@@ -9,8 +9,10 @@ export const groupApi = (groupId: string) => {
     getGroupMembers: () => `${getUrl('getGroupMembers')}`,
 
     getEventDetail: () => `${getUrl('event')}`,
-
     createEvent: () => `${getUrl('event')}`,
+
+    updateStatus: (status: UserStatusType, userId: string) =>
+      `${getUrl('status')}?status=${status}&userId=${userId}`,
   }
 }
 
