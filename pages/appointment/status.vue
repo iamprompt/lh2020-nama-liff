@@ -104,7 +104,7 @@
                   <span>{{ user.displayName }}</span>
                 </CBox>
 
-                <div></div>
+                <div>{{ fromNow }}</div>
               </CBox>
             </CTabPanel>
           </CTabPanels>
@@ -117,7 +117,9 @@
 <script lang="ts">
 import liff from '@line/liff'
 import Vue from 'vue'
+
 import { authApi, groupApi } from '~/utils/api'
+
 interface Istatus {
   [index: string]: {
     title: string
@@ -144,6 +146,7 @@ export default Vue.extend({
   },
   data() {
     return {
+      fromNow: this.$dayjs().fromNow(),
       textSearch: '',
       eventDetail: {},
       statusType: ['notSeen', 'acknowledged', 'travelling', 'arrived'] as Array<

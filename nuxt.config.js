@@ -2,6 +2,9 @@ import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import customIcons from './assets/images/customIcons.js'
 
+// eslint-disable-next-line nuxt/no-cjs-in-config
+require('dayjs/plugin/relativeTime')
+
 require('dotenv').config()
 
 export default {
@@ -64,7 +67,7 @@ export default {
   dayjs: {
     locales: ['en', 'th'],
     defaultLocale: 'th',
-    plugins: [], // Your Day.js plugin
+    plugins: ['relativeTime'], // Your Day.js plugin
   },
 
   env: {

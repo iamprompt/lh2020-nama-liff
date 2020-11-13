@@ -48,7 +48,7 @@ export default Vue.extend({
       if (liff.isLoggedIn()) {
         const userId = await this.getUserId()
         const groupId = await this.getGroupId()
-        const updateToStatus = this.$route.query.status as UserStatusType
+        const updateToStatus = this.$route.query.status as string
 
         await this.updateStatus(updateToStatus, groupId, userId)
         this.isLoaded = true
@@ -67,11 +67,7 @@ export default Vue.extend({
       const LINEContext = await liff.getContext()
       return LINEContext?.groupId || 'Ce78c9d91679c5c958514dee41e53ab19'
     },
-    async updateStatus(
-      status: UserStatusType,
-      groupId: string,
-      userId: string
-    ) {
+    async updateStatus(status: string, groupId: string, userId: string) {
       const updateResult = await this.$axios.post(
         groupApi(groupId).updateStatus(status, userId)
       )
