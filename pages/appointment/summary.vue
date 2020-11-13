@@ -204,45 +204,48 @@ export default Vue.extend({
       this.modalShow = false
     },
     async fetchData() {
-      const getEventDetail = await this.$axios.get(
-        groupApi('Cb34ad23b226c50f08c67308a3e75955a').getEventDetailWId()
-      )
-      console.log(getEventDetail.data.data)
+      const LINEContext = await liff.getContext()
+      if (LINEContext !== null) {
+        const getEventDetail = await this.$axios.get(
+          groupApi(LINEContext.groupId).getEventDetailWId()
+        )
+        console.log(getEventDetail.data.data)
 
-      const rawEvent = getEventDetail.data.data
+        const rawEvent = getEventDetail.data.data
 
-      rawEvent.eventDate = this.$dayjs
-        .unix(rawEvent.eventDateTime._seconds)
-        .format('DD MMM YYYY')
+        rawEvent.eventDate = this.$dayjs
+          .unix(rawEvent.eventDateTime._seconds)
+          .format('DD MMM YYYY')
 
-      rawEvent.eventTime = this.$dayjs
-        .unix(rawEvent.eventDateTime._seconds)
-        .format('HH:mm น.')
+        rawEvent.eventTime = this.$dayjs
+          .unix(rawEvent.eventDateTime._seconds)
+          .format('HH:mm น.')
 
-      this.eventDetail = rawEvent
-      // @ts-expect-error
-      this.friendLists = this.eventDetail.attendeeList
-      // @ts-expect-error
-      this.eventDetail.needUpdate = this.eventDetail.needUpdate
-        ? 'เปิดการใช้งาน'
-        : 'ปิดการใช้งาน'
-      for (const [key, value] of Object.entries(rawEvent.remindFreq)) {
-        let msg = ''
-        switch (key) {
-          case 'b1d':
-            msg = 'ก่อน 1 วัน'
-            break
-          case 'b60m':
-            msg = 'ก่อน 60 นาที'
-            break
-          case 'ae15m':
-            msg = 'หลังทุก ๆ 15 นาที'
-            break
+        this.eventDetail = rawEvent
+        // @ts-expect-error
+        this.friendLists = this.eventDetail.attendeeList
+        // @ts-expect-error
+        this.eventDetail.needUpdate = this.eventDetail.needUpdate
+          ? 'เปิดการใช้งาน'
+          : 'ปิดการใช้งาน'
+        for (const [key, value] of Object.entries(rawEvent.remindFreq)) {
+          let msg = ''
+          switch (key) {
+            case 'b1d':
+              msg = 'ก่อน 1 วัน'
+              break
+            case 'b60m':
+              msg = 'ก่อน 60 นาที'
+              break
+            case 'ae15m':
+              msg = 'หลังทุก ๆ 15 นาที'
+              break
+          }
+
+          if (value === true) this.remindFreq.push(msg)
         }
-
-        if (value === true) this.remindFreq.push(msg)
+        return getEventDetail.data.data
       }
-      return getEventDetail.data.data
     },
   },
 })

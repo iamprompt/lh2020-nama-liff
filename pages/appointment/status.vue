@@ -228,25 +228,28 @@ export default Vue.extend({
       })
     },
     async fetchData() {
-      const getEventDetail = await this.$axios.get(
-        groupApi('Cb34ad23b226c50f08c67308a3e75955a').getEventDetailWId()
-      )
-      console.log(getEventDetail.data.data)
+      const LINEContext = await liff.getContext()
+      if (LINEContext !== null) {
+        const getEventDetail = await this.$axios.get(
+          groupApi(LINEContext.groupId).getEventDetailWId()
+        )
+        console.log(getEventDetail.data.data)
 
-      const rawEvent = getEventDetail.data.data
+        const rawEvent = getEventDetail.data.data
 
-      rawEvent.eventDate = this.$dayjs
-        .unix(rawEvent.eventDateTime._seconds)
-        .format('DD MMM YYYY')
+        rawEvent.eventDate = this.$dayjs
+          .unix(rawEvent.eventDateTime._seconds)
+          .format('DD MMM YYYY')
 
-      rawEvent.eventTime = this.$dayjs
-        .unix(rawEvent.eventDateTime._seconds)
-        .format('HH:mm น.')
+        rawEvent.eventTime = this.$dayjs
+          .unix(rawEvent.eventDateTime._seconds)
+          .format('HH:mm น.')
 
-      this.eventDetail = rawEvent
-      this.updateFriendsList()
+        this.eventDetail = rawEvent
+        this.updateFriendsList()
 
-      return getEventDetail.data.data
+        return getEventDetail.data.data
+      }
     },
     updateFriendsList() {
       // @ts-expect-error
