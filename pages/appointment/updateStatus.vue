@@ -41,7 +41,7 @@ export default Vue.extend({
   },
   async beforeCreate() {
     // Initialize LIFF
-    await liff.init({ liffId: '1655194495-7AEALMp8' })
+    await liff.init({ liffId: '1655194495-D0POdALl' })
   },
   mounted() {
     liff.ready.then(async () => {
