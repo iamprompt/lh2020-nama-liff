@@ -1,3 +1,5 @@
+import { faCalendarAlt, faClock } from '@fortawesome/free-regular-svg-icons'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import customIcons from './assets/images/customIcons.js'
 
 require('dotenv').config()
@@ -48,6 +50,12 @@ export default {
       autoImport: true,
     },
     icons: {
+      iconPack: 'fa',
+      iconSet: {
+        faCalendarAlt,
+        faClock,
+        faSearch,
+      },
       extend: { ...customIcons },
     },
   },

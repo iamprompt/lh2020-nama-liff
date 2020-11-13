@@ -263,9 +263,9 @@ export default Vue.extend({
   font-weight: bold;
   &[aria-selected='true'] {
     color: #f06129;
-    background: -webkit-linear-gradient(180deg, #ff9a3d 13.02%, #f06129 100%);
+    /* background: -webkit-linear-gradient(180deg, #ff9a3d 13.02%, #f06129 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;*/
   }
 }
 
