@@ -103,16 +103,21 @@ export default Vue.extend({
     async initProviders() {
       // Initialize LIFF
       await liff.init({ liffId: '1655194495-7AEALMp8' })
-      // Load Client:auth2
-      await gapi.load('client:auth2')
-      // Initialize GAPIs
-      await gapi.client.int({
-        apiKey: process.env.FIREBASE_API_KEY,
-        clientId: process.env.GCP_CLIENTID,
-        discoveryDocs: [
-          'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
-        ],
-        scope: 'https://www.googleapis.com/auth/calendar',
+      return new Promise(async (resolve) => {
+        // Load Client:auth2
+        await gapi.load('client:auth2', async () => {
+          // Initialize GAPIs
+          await gapi.client.init({
+            apiKey: process.env.FIREBASE_API_KEY,
+            clientId: process.env.GCP_CLIENTID,
+            discoveryDocs: [
+              'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
+            ],
+            scope: 'https://www.googleapis.com/auth/calendar',
+          })
+
+          resolve()
+        })
       })
     },
 
