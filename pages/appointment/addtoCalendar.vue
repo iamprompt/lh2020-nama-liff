@@ -15,7 +15,7 @@
 
         <c-image
           v-if="isLoaded"
-          w="14rem"
+          w="12rem"
           mt="3rem"
           mx="auto"
           :src="require('~/assets/images/icons/GCal.svg')"

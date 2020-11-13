@@ -26,9 +26,15 @@
         pos="relative"
       >
         <!-- header message -->
-        <CBox>
-          <CHeading font-size="lg">
+        <CBox @click="openSummary">
+          <CHeading font-size="xl">
             {{ eventDetail.eventName }}
+            <c-icon
+              name="chevron-right"
+              size="24px"
+              position="relative"
+              top="-2px"
+            />
           </CHeading>
 
           <CText>
@@ -252,6 +258,10 @@ export default Vue.extend({
       this.friendLists = this.eventDetail.attendeeList
       // @ts-expect-error
       this.friends = this.eventDetail.attendeeList
+    },
+    openSummary() {
+      console.log('sdfasdf')
+      this.$router.push('/appointment/summary')
     },
   },
 })
