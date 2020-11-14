@@ -190,31 +190,33 @@ export default Vue.extend({
   async beforeCreate() {
     await liff.init({ liffId: '1655194495-dmpj59zq' })
   },
-  async mounted() {
-    const LINEContext = await liff.getContext()
+  mounted() {
+    liff.ready.then(async () => {
+      const LINEContext = await liff.getContext()
+      console.log(LINEContext)
 
-    const getEventDetail = await this.$axios.get(
-      groupApi(
-        LINEContext?.groupId || 'Ce78c9d91679c5c958514dee41e53ab19'
-      ).getEventDetail()
-    )
+      this.$store.dispatch('setLINEContext', LINEContext)
+      console.log(this.$store.getters.getLINEContext.groupId)
 
-    console.log(getEventDetail)
+      const getEventDetail = await this.$axios.get(
+        groupApi(this.$store.getters.getLINEContext.groupId).getEventDetail()
+      )
 
-    const rawEvent = getEventDetail.data.data
+      console.log(getEventDetail)
 
-    rawEvent.eventDate = this.$dayjs
-      .unix(rawEvent.eventDateTime._seconds)
-      .format('DD MMM YYYY')
+      const rawEvent = getEventDetail.data.data
 
-    rawEvent.eventTime = this.$dayjs
-      .unix(rawEvent.eventDateTime._seconds)
-      .format('HH:mm น.')
+      rawEvent.eventDate = this.$dayjs
+        .unix(rawEvent.eventDateTime._seconds)
+        .format('DD MMM YYYY')
 
-    this.eventDetail = rawEvent
-    this.updateFriendsList()
+      rawEvent.eventTime = this.$dayjs
+        .unix(rawEvent.eventDateTime._seconds)
+        .format('HH:mm น.')
 
-    // this.fetchData()
+      this.eventDetail = rawEvent
+      this.updateFriendsList()
+    })
   },
   methods: {
     statusFriend(status: string) {
