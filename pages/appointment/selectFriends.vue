@@ -41,7 +41,11 @@
             />
           </CBox>
 
-          <CAvatar name="ALL" mr="4" />
+          <CAvatar
+            name="ALL"
+            :src="require('~/assets/images/icons/all.jpg')"
+            mr="4"
+          />
           เลือกทั้งหมด
         </CBox>
         <CBox
